@@ -1,6 +1,8 @@
 node_modules
+.idea
 
 logs
 .log
 
 lib/proxy.js
+test/test.js
