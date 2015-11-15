@@ -1,0 +1,29 @@
+{
+  "name": "light-crawler",
+  "version": "1.0.0",
+  "description": "web crawler",
+  "scripts": {
+    "test": "no"
+  },
+  "author": "zhang2333@github",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "lodash": "^3.10.1",
+    "request": "^2.65.0"
+  },
+  "keywords": [
+    "simple",
+    "crawler",
+    "spider",
+    "queue"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "main": "./lib/crawler",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.3"
+  }
+}
