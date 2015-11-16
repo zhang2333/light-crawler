@@ -38,6 +38,18 @@ describe('Crawler', function () {
 				done();
 			});
 		});
+		
+		it('test retry', function (done) {
+			var url = 'http://www.google.com';
+			c.settings.timeout = 10;
+			c.addTask(url);
+			c.handle = function (data) {
+				expect(data).to.not.be.ok;
+			};
+			c.start(function () {
+				done();
+			});
+		});
 	});
 });
 
