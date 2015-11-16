@@ -1,8 +1,9 @@
 'use strict';
 
-var Crawler = require('../lib/index'),
-	$ = require('cheerio'),
+var $ = require('cheerio'),
 	expect = require('chai').expect;
+
+var Crawler = require('../lib/index');
 
 // http-proxy
 var proxy = require('../lib/proxy').proxy;
@@ -52,4 +53,3 @@ describe('Crawler', function () {
 		});
 	});
 });
-
