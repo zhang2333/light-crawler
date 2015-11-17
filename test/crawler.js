@@ -1,12 +1,11 @@
 'use strict';
 
-var $ = require('cheerio'),
-	expect = require('chai').expect;
+var expect = require('chai').expect;
 
-var Crawler = require('../lib/index');
+var Crawler = require('../index');
 
 // http-proxy
-var proxy = require('../lib/proxy').proxy;
+var proxy = require('../t/proxy').proxy;
 
 describe('Crawler', function () {
 	describe('#crwal()', function () {

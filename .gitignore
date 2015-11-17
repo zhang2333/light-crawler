@@ -5,5 +5,4 @@ node_modules
 logs
 .log
 
-lib/proxy.js
-test/test.js
+t
