@@ -19,9 +19,9 @@ describe('Crawler', function () {
 		it('simple test: single url', function (done) {
 			var url = 'http://www.google.com';
 			c.addTask(url);
-			c.handle = function (data) {
+			c.addRule(function (data) {
 				expect(data).to.be.ok;
-			};
+			});
 			c.start(function () {
 				done();
 			});
@@ -31,9 +31,9 @@ describe('Crawler', function () {
 			var url = 'http://www.google.com';
 			c.settings.timeout = 10;
 			c.addTask(url);
-			c.handle = function (data) {
-				expect(data).to.not.be.ok;
-			};
+			c.addRule(function (data) {
+				expect(data).to.be.ok;
+			});
 			c.start(function () {
 				done();
 			});
@@ -45,9 +45,9 @@ describe('Crawler', function () {
 			c.settings.interval = 1500;
 			c.settings.concurrency = 2;
 			c.addTasks(urls);
-			c.handle = function (data) {
+			c.addRule(function (data) {
 				expect(data).to.be.ok;
-			};
+			});
 			c.start(function () {
 				done();
 			});
