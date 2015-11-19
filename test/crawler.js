@@ -18,11 +18,9 @@ describe('Crawler', function () {
 
 		it('simple test: single url', function (done) {
 			var url = 'http://www.google.com';
-			c.addTask(url);
-			c.addRule(function (data) {
+			c.addTasks(url).addRule(function (data) {
 				expect(data).to.be.ok;
-			});
-			c.start(function () {
+			}).start(function () {
 				done();
 			});
 		});
@@ -30,27 +28,35 @@ describe('Crawler', function () {
 		it('test timeout retry', function (done) {
 			var url = 'http://www.google.com';
 			c.settings.timeout = 10;
-			c.addTask(url);
-			c.addRule(function (data) {
+			c.addTasks(url).addRule(function (data) {
 				expect(data).to.be.ok;
-			});
-			c.start(function () {
+			}).start(function () {
 				done();
 			});
 		});
-		
+
 		it('test array interval concurrency', function (done) {
 			var urls = ['http://www.baidu.com', 'http://www.google.com',
 				'http://www.sina.com', 'http://www.nhk.or.jp'];
-			c.settings.interval = 1500;
-			c.settings.concurrency = 2;
-			c.addTasks(urls);
-			c.addRule(function (data) {
+			c.twistSettings({ interval: 1500, concurrency: 2 });
+			c.addTasks(urls).addRule(function (data) {
 				expect(data).to.be.ok;
-			});
-			c.start(function () {
+			}).start(function () {
 				done();
 			});
+		});
+
+		it('test repetitive tasks', function (done) {
+			var urls = ['http://www.baidu.com', 'http://www.baidu.com',
+				'http://www.baidu.com', 'http://www.sina.com'];
+			c.settings.interval = 1500;
+			c.addTasks(urls).addRule(function (data) { }).start(function () {
+				expect(c.taskCounter).to.be.equal(2);
+				done();
+			});
+			setTimeout(function () {
+				c.addTasks('http://www.baidu.com');
+			}, 1600);
 		});
 	});
 });
