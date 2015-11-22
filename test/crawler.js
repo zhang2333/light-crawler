@@ -1,5 +1,7 @@
 'use strict';
 
+var util = require('util');
+
 var expect = require('chai').expect;
 
 var Crawler = require('../index');
@@ -9,7 +11,7 @@ var proxy = require('../t/proxy').proxy;
 
 describe('Crawler', function () {
 	describe('#crwal()', function () {
-		this.timeout(50000);
+		this.timeout(30000);
 
 		var c;
 
@@ -47,8 +49,8 @@ describe('Crawler', function () {
 		it('test repetitive tasks', function (done) {
 			var urls = ['http://www.baidu.com', 'http://www.baidu.com',
 				'http://www.baidu.com', 'http://www.sina.com'];
-			c = new Crawler({ proxy: proxy, interval: 1500});
-			c.addTasks(urls).addRule(function (data) {}).start(function () {
+			c = new Crawler({ proxy: proxy, interval: 1500 });
+			c.addTasks(urls).addRule(function (data) { }).start(function () {
 				expect(c.taskCounter).to.be.equal(3);
 				done();
 			});
