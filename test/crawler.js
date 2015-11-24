@@ -19,7 +19,7 @@ describe('Crawler', function () {
 			var url = 'http://www.google.com';
 			c = new Crawler({ proxy: proxy });
 			c.addTasks(url).addRule(function (data) {
-				expect(data).to.be.ok;
+				expect(data.body).to.be.ok;
 			}).start(function () {
 				done();
 			});
@@ -29,7 +29,7 @@ describe('Crawler', function () {
 			var url = 'http://www.google.com';
 			c = new Crawler({ proxy: proxy, timeout: 10 });
 			c.addTasks(url).addRule(function (data) {
-				expect(data).to.not.be.ok;
+				expect(data.body).to.not.be.ok;
 			}).start(function () {
 				done();
 			});
@@ -38,9 +38,9 @@ describe('Crawler', function () {
 		it('test array interval concurrency', function (done) {
 			var urls = ['http://www.baidu.com', 'http://www.google.com',
 				'http://www.sina.com', 'http://www.nhk.or.jp'];
-			c = new Crawler({ proxy: proxy, interval: 1500, concurrency: 2 });
+			c = new Crawler({ proxy: proxy, interval: 500, concurrency: 2 });
 			c.addTasks(urls).addRule(function (data) {
-				expect(data).to.be.ok;
+				expect(data.body).to.be.ok;
 			}).start(function () {
 				done();
 			});
