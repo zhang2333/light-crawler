@@ -20,8 +20,8 @@ c = new Crawler({ interval: 1500 });
 
 c.addTasks(urls);
 
-c.addRule('http://www\\.zgjtb\\.com/gonglu/node_123[_]?[0-9]*\\.htm', function (data) {
-	var $ = cheerio.load(data);
+c.addRule('http://www.zgjtb.com/gonglu/node_123[_]?[0-9]*.htm', function (data) {
+	var $ = cheerio.load(data.body);
 	var links = Crawler.getLinks($('.p-list .p-li-ul'));
 	links = links.slice(0, 3);
 	links = links.map(function (link) {
@@ -30,13 +30,13 @@ c.addRule('http://www\\.zgjtb\\.com/gonglu/node_123[_]?[0-9]*\\.htm', function (
 	c.addTasks(links);
 });
 
-c.addRule('http://www\\.zgjtb\\.com/gonglu/[0-9]{4}-[0-9]{1,2}.*\\.htm', function (data) {
-	var $ = cheerio.load(data);
+c.addRule('http://www.zgjtb.com/gonglu/[0-9]{4}-[0-9]{1,2}**.htm', function (data) {
+	var $ = cheerio.load(data.body);
 	var title = $('.lbox2 .t-title h1').text();
 	var info = $('.lbox2 .t-title p').text();
 	console.log(title + ' ' + info);
 });
-
+console.log(c._rules);
 c.start(function () {
 	console.log('news-site-zgjtb finished.')
 });
