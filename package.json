@@ -1,8 +1,8 @@
 {
   "name": "light-crawler",
   "version": "1.0.0",
-  "author": "Louis Zhang <spade9k@gmail.com>",
-  "description": "web crawler",
+  "author": "LouisZhang <spade9k@gmail.com>",
+  "description": "a simplified web crawler",
   "keywords": [
     "simple",
     "crawler",
@@ -27,7 +27,11 @@
     "type": "git",
     "url": "git://github.com/zhang2333/light-crawler.git"
   },
+  "bugs": {
+    "url": "https://github.com/zhang2333/light-crawler/issues"
+  },
   "scripts": {
     "mocha-test": "mocha test/"
-  }
+  },
+  "license": "MIT"
 }
