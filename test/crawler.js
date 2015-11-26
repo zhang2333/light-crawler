@@ -25,9 +25,11 @@ describe('Crawler', function () {
 
 		it('test timeout retry', function (done) {
 			var url = 'http://www.google.com';
-			c = new Crawler({ timeout: 10 });
+			c = new Crawler({ requestOpts: {
+				timeout: 10
+			}});
 			c.addTasks(url).addRule(function (data) {
-				expect(data.body).to.not.be.ok;
+				expect(data.body).to.not.exist;
 			}).start(function () {
 				done();
 			});

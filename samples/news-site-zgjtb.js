@@ -36,7 +36,7 @@ c.addRule('http://www.zgjtb.com/gonglu/[0-9]{4}-[0-9]{1,2}**.htm', function (dat
 	var info = $('.lbox2 .t-title p').text();
 	console.log(title + ' ' + info);
 });
-console.log(c._rules);
+
 c.start(function () {
 	console.log('news-site-zgjtb finished.')
 });
