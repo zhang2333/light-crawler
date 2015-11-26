@@ -1,6 +1,6 @@
 {
   "name": "light-crawler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "LouisZhang <spade9k@gmail.com>",
   "description": "a simplified web crawler",
   "keywords": [
