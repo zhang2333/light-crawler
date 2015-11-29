@@ -15,10 +15,11 @@ var c = new Crawler();
 // add a url or array of url for crawling
 c.addTasks('http://www.xxx.com');
 // define a crawling rule and processing funciton
-c.addRule(function (data) {
-	// data has 2 props : url and body
-	// data.body is the HTML of the crawling page
-	process data.body... // you can use cheerio
+c.addRule(function (result) {
+	// result has 2 props : task and body
+	// result.task's props : id, url, others you added.
+	// result.body is the HTML of the crawling page
+	process result.body... // you can use cheerio
 })
 // start your crawler
 c.start(function () {
@@ -62,13 +63,26 @@ var c = new Crawler({
 ```
 * `twist(opts: object)`
 like foregoing
-* `addTasks(urls: string or array)`
+* `addTasks(urls: string or array[, props: obejct])`
 add task into task-pool
 ```javascript
 // e.g.：
 c.addTasks('http://www.google.com');
 // or an array
 c.addTasks(['http://www.google.com','http://www.yahoo.com']);
+
+// add props for a task
+c.addTasks('http://www.google.com', { disc: 'google' });
+// add same props for tasks
+c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'search engine' });
+// get these props in processing function
+..function (result) {
+	if (result.task.type == 'search engine') {
+		console.log(result.task.url + ' is a S.E. site.');
+		...
+	}
+	...
+}...
 ```
 * `addRule(reg: string, func: function)`
 configure a rule for crawling
@@ -81,18 +95,18 @@ var tasks = [
 	'http://www.google.com/info/123abc'
 ];
 c.addTasks(tasks);
-c.addRule('http://www.google.com/[0-9]*', function (data) {
+c.addRule('http://www.google.com/[0-9]*', function (result) {
 	// match to tasks[0] and tasks[1]
-	// process data.body
+	// process result.body
 });
-c.addRule('http://www.google.com/info/**', function (data) {
+c.addRule('http://www.google.com/info/**', function (result) {
 	// match to tasks[2] and tasks[3]
-	// process data.body
+	// process result.body
 });
 // or you can not define the rule
-c.addRule(function (data) {
+c.addRule(function (result) {
 	// match to all url in tasks
-	// process data.body
+	// process result.body
 });
 ```
 > Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com`,instead of `www\\.a\\.com`.If you need `.*`,you can use `**`, just like upper example.
