@@ -16,7 +16,6 @@ describe('Crawler', function () {
 			var url = 'http://www.google.com';
 			c = new Crawler();
 			c.addTasks(url).addRule(function (data) {
-				require('fs').writeFileSync('C:\\Users\\hp\\Desktop\\a.html', data.body);
 				expect(data.body).to.be.ok;
 			}).start(function () {
 				done();
