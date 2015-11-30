@@ -4,6 +4,6 @@ node_modules
 .npmignore
 
 logs
-.log
+*.log
 
 t
