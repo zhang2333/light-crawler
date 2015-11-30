@@ -43,6 +43,7 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
 * `taskCounter`: count all finished tasks whether they are failed or not
 * `failCounter`: count all failed tasks
 * `errLog`: log all error infos in crawling
+* `downloadDir`: downloaded files in here, default: `../__dirname`
 
 ### Crawler API
 
@@ -116,9 +117,25 @@ start the crawler
 ```javascript
 // e.g.：
 c.start(function () {
-	// it will be called when task-pool was drained.
+	// it will be called when task-pool is drained.
 	console.log('done！');
 });
+```
+
+### Download Files
+just add `downloadTask: true` for task you need download
+```javascript
+// e.g.：
+var file = 'http://xxx/abc.jpg';
+// abc.jpg will be downloaded into c.settings.downloadDir
+c.addTasks(file, {downloadTask: true});
+
+// or you can specify its name
+c.addTasks(file, {downloadTask: true, downloadFile: 'mine.jpg'});
+// or specify relative dir(c.settings.downloadDir)
+c.addTasks(file, {downloadTask: true, downloadFile: 'jpg/mine.jpg'});
+// or specify absolute dir
+c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 ```
 
 ### Utils API
