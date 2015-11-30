@@ -1,6 +1,8 @@
 'use strict';
 
-var util = require('util');
+var util = require('util'),
+	path = require('path'),
+	fs = require('fs');
 
 var expect = require('chai').expect;
 
@@ -8,7 +10,7 @@ var Crawler = require('../index');
 
 describe('Crawler', function () {
 	describe('#crwal()', function () {
-		this.timeout(30000);
+		this.timeout(60000);
 
 		var c;
 
@@ -62,6 +64,16 @@ describe('Crawler', function () {
 				c.addTasks('http://www.baidu.com');
 				c.addTasks(['http://www.baidu.com', 'http://www.sohu.com']);
 			}, 1600);
+		});
+		
+		it('test download', function (done) {
+			console.log(c.settings.downloadDir);
+			var url = 'http://img.frbiz.com/nimg/65/cd/340002f30a29ab5c69dbae001efc-0x0-1/crawler_excavator.jpg';
+			c.addTasks(url, {downloadTask: true, downloadFile: 'test.jpg'});
+			c.start(function () {
+				fs.unlinkSync(path.resolve(c.settings.downloadDir, 'test.jpg'));
+				done();
+			});
 		});
 	});
 });
