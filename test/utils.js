@@ -22,4 +22,9 @@ describe('utils', function () {
 		var links = Crawler.getLinks(html);
 		expect(links).to.eql(['1','2','3','4']);
 	});
+	
+	it('#loadHeaders()', function () {
+		var headers = Crawler.loadHeaders('samples/example.headers');
+		expect(headers).to.have.deep.property('Host', 'abc');
+	});
 });
