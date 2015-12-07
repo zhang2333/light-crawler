@@ -168,4 +168,29 @@ var $ = cheerio.load(html);
 var links = Crawler.getLinks($('ul'));
 ```
 
+* `loadHeaders(file: string)`
+load request headers from file
+`example.headers`
+```
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding:gzip, deflate, sdch
+Accept-Language:zh-CN,zh;q=0.8,en;q=0.6
+Cache-Control:max-age=0
+Connection:keep-alive
+Cookie:csrftoken=Wwb44iw
+Host:abc
+Upgrade-Insecure-Requests:1
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64)
+...
+```
+load this file and set headers for request
+```js
+var headers = c.loadHeaders('example.headers');
+c.twist({
+	requestOpts: {
+		headers: headers
+	}
+});
+```
+
 [request-opts]: https://github.com/request/request#requestoptions-callback
