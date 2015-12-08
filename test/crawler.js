@@ -10,13 +10,13 @@ var Crawler = require('../index');
 
 describe('Crawler', function () {
 	describe('#crwal()', function () {
-		this.timeout(60000);
+		this.timeout(120000);
 
 		var c;
 
 		it('simple test: single url', function (done) {
 			var url = 'http://www.google.com';
-			c = new Crawler();
+			c = new Crawler({ id: 'simple test' });
 			c.addTasks(url).addRule(function (result) {
 				expect(result.body).to.be.ok;
 			}).start(function () {
@@ -67,7 +67,7 @@ describe('Crawler', function () {
 		});
 		
 		it('test download', function (done) {
-			console.log(c.settings.downloadDir);
+			c = new Crawler({ id: 'download test' });
 			var url = 'http://img.frbiz.com/nimg/65/cd/340002f30a29ab5c69dbae001efc-0x0-1/crawler_excavator.jpg';
 			c.addTasks(url, {downloadTask: true, downloadFile: 'test.jpg'});
 			c.start(function () {
