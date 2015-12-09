@@ -42,6 +42,7 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
  * or other settings in [request opts][request-opts]
 * `taskCounter`: count all finished tasks whether they are failed or not
 * `failCounter`: count all failed tasks
+* `id`: crawler's id,integer or string
 * `errLog`: log all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
 
@@ -120,6 +121,27 @@ c.start(function () {
 	// it will be called when task-pool is drained.
 	console.log('done！');
 });
+```
+
+* `log(info: string, isErr: boolean)`
+Crawler's logger
+```javascript
+// e.g.：
+// if it's an error,c.errLog will append it
+c.log('some problems', true);
+// console print: 
+// [c.id if it has]some problems
+
+// or you can do something after log() everytime
+c.afterLog = function (info, isErr) {
+	fs.appendFileSync('c.log', info); // append info to c.log
+	....
+};
+
+// even you can replace the log()
+c.log = function (info, isErr) {
+	process info....
+};
 ```
 
 ### Download Files
