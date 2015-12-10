@@ -63,7 +63,7 @@ var c = new Crawler({
 	}
 });
 ```
-* `twist(opts: object)`
+* `tweak(opts: object)`
 like foregoing
 * `addTasks(urls: string or array[, props: obejct])`
 add task into task-pool
@@ -149,7 +149,7 @@ just add `downloadTask: true` for task you need download
 ```javascript
 // e.g.：
 // specify download directory
-c.twist({ downloadDir: 'D:\\yyy' });
+c.tweak({ downloadDir: 'D:\\yyy' });
 
 var file = 'http://xxx/abc.jpg';
 // abc.jpg will be downloaded into D:\\yyy
@@ -208,7 +208,7 @@ User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64)
 load this file and set headers for request
 ```js
 var headers = c.loadHeaders('example.headers');
-c.twist({
+c.tweak({
 	requestOpts: {
 		headers: headers
 	}
