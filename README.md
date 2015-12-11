@@ -123,6 +123,15 @@ c.start(function () {
 });
 ```
 
+* `pause()`
+pause the crawler
+
+* `resume()`
+resume the crawler
+
+* `isPaused()`
+the crawler is is paused or not
+
 * `log(info: string, isErr: boolean)`
 Crawler's logger
 ```javascript
