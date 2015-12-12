@@ -39,7 +39,7 @@ describe('Crawler', function () {
 		it('test array interval concurrency', function (done) {
 			c = new Crawler({ interval: 500, concurrency: 2 });
 			c.addTasks(['http://www.baidu.com', 'http://www.google.com'], { type: 'SE' });
-			c.addTasks(['http://www.sina.com', 'http://www.nhk.or.jp'], { type: 'Other' });
+			c.addTasks(['http://www.tudou.com', 'http://www.nhk.or.jp'], { type: 'Other' });
 			c.addRule(function (result) {
 				expect(result.body).to.be.ok;
 				if (result.task.id <= 2) {
@@ -54,7 +54,7 @@ describe('Crawler', function () {
 
 		it('test repetitive tasks', function (done) {
 			var urls = ['http://www.baidu.com', 'http://www.baidu.com',
-				'http://www.baidu.com', 'http://www.sina.com'];
+				'http://www.baidu.com', 'http://www.tudou.com'];
 			c = new Crawler({ interval: 1500 });
 			c.addTasks(urls).addRule(function (result) { }).start(function () {
 				expect(c.taskCounter).to.be.equal(3);

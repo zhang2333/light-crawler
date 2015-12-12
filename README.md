@@ -45,6 +45,7 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
 * `id`: crawler's id,integer or string
 * `errLog`: log all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
+* `finishTimeout`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks.default:`1000`(ms)
 
 ### Crawler API
 
@@ -59,7 +60,7 @@ var c = new Crawler({
 	requestOpts: {
 		timeout: 5000,
 		proxy: http://xxx,
-		.... // other props of`Crawler.requestOpts`
+		.... // other props of `Crawler.requestOpts`
 	}
 });
 ```
