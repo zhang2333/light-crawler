@@ -45,7 +45,7 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
 * `id`: crawler's id,integer or string
 * `errLog`: log all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
-* `finishTimeout`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks.default:`1000`(ms)
+* `finishTimeout`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`1000`(ms)
 
 ### Crawler API
 
@@ -162,11 +162,12 @@ just add `downloadTask: true` for task you need download
 c.tweak({ downloadDir: 'D:\\yyy' });
 
 var file = 'http://xxx/abc.jpg';
-// abc.jpg will be downloaded into D:\\yyy
+// 'abc.jpg' will be downloaded into 'D:\\yyy'
 c.addTasks(file, {downloadTask: true});
 // or you can specify its name
 c.addTasks(file, {downloadTask: true, downloadFile: 'mine.jpg'});
-// or specify relative dir(D:\\yyy)
+// or specify relative dir(to 'D:\\yyy')
+// if this directory ('jpg') doesn't exist,crawler will create it
 c.addTasks(file, {downloadTask: true, downloadFile: 'jpg/mine.jpg'});
 // or specify absolute dir
 c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
