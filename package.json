@@ -1,6 +1,6 @@
 {
   "name": "light-crawler",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": "LouisZhang <spade9k@gmail.com>",
   "description": "a simplified web crawler, easy to use for crawling pages and downloading resources.",
   "keywords": [
