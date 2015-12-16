@@ -24,17 +24,17 @@ describe('Crawler', function () {
 			});
 		});
 
-		// it('test timeout retry', function (done) {
-		// 	var url = 'http://www.google.com';
-		// 	c = new Crawler({ requestOpts: {
-		// 		timeout: 10
-		// 	}});
-		// 	c.addTasks(url).addRule(function (result) {
-		// 		expect(result.body).to.not.exist;
-		// 	}).start(function () {
-		// 		done();
-		// 	});
-		// });
+		it('test timeout retry', function (done) {
+			var url = 'http://www.google.com';
+			c = new Crawler({ requestOpts: {
+				timeout: 10
+			}});
+			c.addTasks(url).addRule(function (result) {
+				expect(result.body).to.not.exist;
+			}).start(function () {
+				done();
+			});
+		});
 
 		// it('test array interval concurrency', function (done) {
 		// 	c = new Crawler({ interval: 500, concurrency: 2 });
