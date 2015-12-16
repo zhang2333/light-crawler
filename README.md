@@ -2,7 +2,7 @@
 
 English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/wiki/Chinese-Doc).
 
-### How to install
+### Install
 ```shell
 npm install light-crawler
 ```
@@ -31,6 +31,7 @@ c.start(function () {
 In light-crawler,crawling page is called `task`.Task will be put into task-pool and be executed in order.
 
 * `settings`: crawler's basic settings
+ * `id`: crawler's id,integer or string，defalut: `null`
  * `interval`: crawling interval，defalut: `0`
  * `retry`: retry times，defalut:`3`
  * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
@@ -42,10 +43,9 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
  * or other settings in [request opts][request-opts]
 * `taskCounter`: count all finished tasks whether they are failed or not
 * `failCounter`: count all failed tasks
-* `id`: crawler's id,integer or string
 * `errLog`: log all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
-* `finishTimeout`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`1000`(ms)
+* `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
 
 ### Crawler API
 

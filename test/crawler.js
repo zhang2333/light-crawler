@@ -67,14 +67,36 @@ describe('Crawler', function () {
 			}, 1600);
 		});
 		
-		// it('test download', function (done) {
-		// 	c = new Crawler({ id: 'download test' });
-		// 	var url = 'http://img.frbiz.com/nimg/65/cd/340002f30a29ab5c69dbae001efc-0x0-1/crawler_excavator.jpg';
-		// 	c.addTasks(url, {downloadTask: true, downloadFile: 'test.jpg'});
-		// 	c.start(function () {
-		// 		fs.unlinkSync(path.resolve(c.settings.downloadDir, 'test.jpg'));
-		// 		done();
-		// 	});
-		// });
+		it('test download', function (done) {
+			c = new Crawler({ id: 'download test' });
+			var url = 'http://img.frbiz.com/nimg/65/cd/340002f30a29ab5c69dbae001efc-0x0-1/crawler_excavator.jpg';
+			c.addTasks(url, {downloadTask: true, downloadFile: 'test.jpg'});
+			c.start(function () {
+				fs.unlinkSync(path.resolve(c.settings.downloadDir, 'test.jpg'));
+				done();
+			});
+		});
+		
+		it('test pause/resume', function (done) {
+			c = new Crawler({ 
+				id: 'pause/resume',
+				interval: 1000
+			});
+			c.addTasks(['http://www.baidu.com', 'http://www.google.com', 'http://www.tudou.com', 'http://www.nhk.or.jp']);
+			c.addRule(function (r) {
+				expect(r.body).to.be.ok;
+			});
+			c.start(function () {
+				expect(c.taskCounter).to.be.equal(4);
+				done();
+			});
+			setTimeout(function() {
+				c.pause();
+				setTimeout(function() {
+					expect(c.isPaused()).to.be.true;
+					c.resume();
+				}, 5000);
+			}, 2000);
+		});
 	});
 });
