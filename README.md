@@ -1,5 +1,7 @@
 ## Light Crawler - Simplified Crawler
 
+[![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
+
 English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/blob/master/README_zh_CN.md).
 
 ### Install
@@ -58,11 +60,11 @@ construtor of `Crawler`
 var c = new Crawler({
 	interval: 1000,
 	retry: 5,
-	.... // other props of `Crawler.settings`
+	.... // other props of `crawler.settings`
 	requestOpts: {
 		timeout: 5000,
 		proxy: http://xxx,
-		.... // other props of `Crawler.requestOpts`
+		.... // other props of `crawler.requestOpts`
 	}
 });
 ```
@@ -116,12 +118,12 @@ c.addRule(function (result) {
 ```
 > Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com`,instead of `www\\.a\\.com`.If you need `.*`,you can use `**`, just like upper example.
 
-* `start(callback: function)`
+* `start(onFinished: function)`
 start the crawler
 ```javascript
 // e.g.：
 c.start(function () {
-	// it will be called when task-pool is drained.
+	// on finished
 	console.log('done！');
 });
 ```
@@ -136,7 +138,7 @@ resume the crawler
 the crawler is is paused or not
 
 * `log(info: string, isErr: boolean, type: int)`
-Crawler's logger
+crawler's logger
 ```javascript
 // e.g.：
 // if it's an error,c.errLog will append it
@@ -159,7 +161,7 @@ c.log = function (info, isErr, type) {
 ```
 
 ### Download Files
-just add `downloadTask: true` for task you need download
+just add `downloadTask: true` for task you need to download
 ```javascript
 // e.g.：
 // specify download directory
@@ -222,7 +224,7 @@ User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64)
 ```
 load this file and set headers for request
 ```js
-var headers = c.loadHeaders('example.headers');
+var headers = Crawler.loadHeaders('example.headers');
 c.tweak({
 	requestOpts: {
 		headers: headers

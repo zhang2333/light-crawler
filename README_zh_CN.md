@@ -1,5 +1,7 @@
 ## light-crawler 中文文档
 
+[![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
+
 ### 安装
 
 ```shell
@@ -222,7 +224,7 @@ User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64)
 ```
 加载文件，然后将headers对象传给request
 ```js
-var headers = c.loadHeaders('example.headers');
+var headers = Crawler.loadHeaders('example.headers');
 c.tweak({
 	requestOpts: {
 		headers: headers

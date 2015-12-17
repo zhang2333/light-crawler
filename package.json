@@ -32,7 +32,7 @@
     "url": "https://github.com/zhang2333/light-crawler/issues"
   },
   "scripts": {
-    "mocha-test": "mocha test/"
+    "test": "mocha test/"
   },
   "license": "MIT"
 }
