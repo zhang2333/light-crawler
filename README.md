@@ -135,7 +135,7 @@ resume the crawler
 * `isPaused()`
 the crawler is is paused or not
 
-* `log(info: string, isErr: boolean)`
+* `log(info: string, isErr: boolean, type: int)`
 Crawler's logger
 ```javascript
 // e.g.：
@@ -151,7 +151,9 @@ c.afterLog = function (info, isErr) {
 };
 
 // even you can replace the log()
-c.log = function (info, isErr) {
+// type is color code of first '[...]', e.g.'[Crawler is Finished]'
+// 1 red,2 green,3 yellow,4 blue,5 magenta,6 cyan...so on
+c.log = function (info, isErr, type) {
 	process info....
 };
 ```
