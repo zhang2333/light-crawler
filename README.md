@@ -1,6 +1,6 @@
 ## Light Crawler - Simplified Crawler
 
-English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/wiki/Chinese-Doc).
+English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/blob/master/README_zh_CN.md).
 
 ### Install
 ```shell
