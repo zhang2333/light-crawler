@@ -43,6 +43,8 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
  * or other settings in [request opts][request-opts]
 * `taskCounter`: count all finished tasks whether they are failed or not
 * `failCounter`: count all failed tasks
+* `started`
+* `finished`
 * `errLog`: log all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
 * `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
@@ -140,7 +142,7 @@ Crawler's logger
 // if it's an error,c.errLog will append it
 c.log('some problems', true);
 // console print: 
-// [c.id if it has]some problems
+// [c.settings.id if it has]some problems
 
 // or you can do something after log() everytime
 c.afterLog = function (info, isErr) {

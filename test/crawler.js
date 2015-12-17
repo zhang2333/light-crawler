@@ -10,7 +10,7 @@ var Crawler = require('../index');
 
 describe('Crawler', function () {
 	describe('#crwal()', function () {
-		this.timeout(120000);
+		this.timeout(60000);
 
 		var c;
 
