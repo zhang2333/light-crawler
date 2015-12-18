@@ -10,7 +10,7 @@ var Crawler = require('../index');
 
 describe('Crawler', function () {
 	describe('#crwal()', function () {
-		this.timeout(60000);
+		this.timeout(80000);
 
 		var c;
 
@@ -69,7 +69,7 @@ describe('Crawler', function () {
 		
 		it('test download', function (done) {
 			c = new Crawler({ id: 'download test' });
-			var url = 'http://img.frbiz.com/nimg/65/cd/340002f30a29ab5c69dbae001efc-0x0-1/crawler_excavator.jpg';
+			var url = 'http://gmade.net/dealer/images/gmade_stealth.jpg';
 			c.addTasks(url, {downloadTask: true, downloadFile: 'test.jpg'});
 			c.start(function () {
 				fs.unlinkSync(path.resolve(c.settings.downloadDir, 'test.jpg'));
