@@ -56,7 +56,7 @@ describe('Crawler', function () {
 		it('test repetitive tasks', function (done) {
 			var urls = ['http://www.baidu.com', 'http://www.baidu.com',
 				'http://www.baidu.com', 'http://www.tudou.com'];
-			c = new Crawler({ interval: 1500 });
+			c = new Crawler({ interval: 500 });
 			c.addTasks(urls).addRule(function (result) { }).start(function () {
 				expect(c.taskCounter).to.be.equal(3);
 				done();
@@ -64,7 +64,7 @@ describe('Crawler', function () {
 			setTimeout(function () {
 				c.addTasks('http://www.baidu.com');
 				c.addTasks(['http://www.baidu.com', 'http://www.sohu.com']);
-			}, 1600);
+			}, 1000);
 		});
 		
 		it('test download', function (done) {
@@ -80,7 +80,7 @@ describe('Crawler', function () {
 		it('test pause/resume', function (done) {
 			c = new Crawler({ 
 				id: 'pause/resume',
-				interval: 1000
+				interval: 500
 			});
 			c.addTasks(['http://www.baidu.com', 'http://www.google.com', 'http://www.tudou.com', 'http://www.nhk.or.jp']);
 			c.addRule(function (r) {
@@ -95,8 +95,8 @@ describe('Crawler', function () {
 				setTimeout(function() {
 					expect(c.isPaused()).to.be.true;
 					c.resume();
-				}, 5000);
-			}, 2000);
+				}, 1000);
+			}, 1000);
 		});
 	});
 });
