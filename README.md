@@ -34,7 +34,7 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
 
 * `settings`: crawler's basic settings
  * `id`: crawler's id,integer or string，defalut: `null`
- * `interval`: crawling interval，defalut: `0`
+ * `interval`: crawling interval，defalut: `0`(ms).or a random value in a range e.g.`[200,500]`
  * `retry`: retry times，defalut:`3`
  * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
  * `skipRepetitiveTask`: whether delete the repetitive task(same url)，defalut: `true`
@@ -146,15 +146,19 @@ c.log('some problems', true);
 // console print: 
 // [c.settings.id if it has]some problems
 
-// or you can do something after log() everytime
+// type is color code of first '[...]', e.g.'[Crawler is Finished]'
+// 1 red,2 green,3 yellow,4 blue,5 magenta,6 cyan...so on
+c.log('[Parsed]blahblah~', false, 4);
+// console print: 
+// [c.settings.id if it has][Parsed]([Parsed] wil be blue)blahblah~
+
+// you can do something after log() everytime
 c.afterLog = function (info, isErr) {
 	fs.appendFileSync('c.log', info); // append info to c.log
 	....
 };
 
 // even you can replace the log()
-// type is color code of first '[...]', e.g.'[Crawler is Finished]'
-// 1 red,2 green,3 yellow,4 blue,5 magenta,6 cyan...so on
 c.log = function (info, isErr, type) {
 	process info....
 };

@@ -19,6 +19,7 @@ describe('Crawler', function () {
 			c = new Crawler({ id: 'simple test' });
 			c.addTasks(url).addRule(function (result) {
 				expect(result.body).to.be.ok;
+                c.log('[Successful]~~~', false, 2);
 			}).start(function () {
 				done();
 			});
@@ -37,7 +38,7 @@ describe('Crawler', function () {
 		});
 
 		it('test array interval concurrency', function (done) {
-			c = new Crawler({ interval: 500, concurrency: 2 });
+			c = new Crawler({ interval: [200, 700], concurrency: 2 });
 			c.addTasks(['http://www.baidu.com', 'http://www.google.com'], { type: 'SE' });
 			c.addTasks(['http://www.tudou.com', 'http://www.nhk.or.jp'], { type: 'Other' });
 			c.addRule(function (result) {
@@ -82,12 +83,12 @@ describe('Crawler', function () {
 				id: 'pause/resume',
 				interval: 500
 			});
-			c.addTasks(['http://www.baidu.com', 'http://www.google.com', 'http://www.tudou.com', 'http://www.nhk.or.jp']);
+			c.addTasks(['http://www.baidu.com', 'http://www.google.com', 'http://www.nhk.or.jp']);
 			c.addRule(function (r) {
 				expect(r.body).to.be.ok;
 			});
 			c.start(function () {
-				expect(c.taskCounter).to.be.equal(4);
+				expect(c.taskCounter).to.be.equal(3);
 				done();
 			});
 			setTimeout(function() {
@@ -96,7 +97,7 @@ describe('Crawler', function () {
 					expect(c.isPaused()).to.be.true;
 					c.resume();
 				}, 1000);
-			}, 1000);
+			}, 700);
 		});
 	});
 });

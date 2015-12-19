@@ -34,7 +34,7 @@ c.start(function () {
 
 * `settings`: 爬虫的基本设置
  * `id`: 爬虫的id，可以是字符串也可以是整型，主要用于和其他爬虫区分
- * `interval`: 爬取间隔的毫秒值，默认为`0`
+ * `interval`: 爬取间隔的毫秒值，默认为`0`(毫秒).或者是一个范围内的随机值，如`[200,500]`
  * `retry`: 重试次数，默认为`3`
  * `concurrency`: 并发爬取页面数，默认为`1`
  * `skipRepetitiveTask`: 是否去除重复的任务（相同的url），默认为`true`
@@ -144,17 +144,21 @@ Crawler's logger
 // 如果这一条log是errorlog，那么c.errLog会追加它
 c.log('some problems', true);
 // 控制台输出: 
-// [c.id]（如果爬虫有id）some problems
+// [c.settings.id]（如果爬虫有id）some problems
 
-// 或者你可以在每次log()之后做一些操作
+// type是每行log中第一个'[...]'字符串的颜色标记, 比如'[Crawler is Finished]'
+// type的取值：1 red,2 green,3 yellow,4 blue,5 magenta,6 cyan等等
+c.log('[已解析]blahblah~', false, 4);
+// console print: 
+// [c.settings.id]（如果爬虫有id）[已解析]([已解析]将是蓝色的)blahblah~
+
+// 你可以在每次log()之后做一些操作
 c.afterLog = function (info, isErr) {
 	fs.appendFileSync('c.log', info); // 将会追加到c.log
 	....
 };
 
 // 你甚至可以把log()覆盖为自定义的
-// type是每行log中第一个'[...]'字符串的颜色标记, 比如'[Crawler is Finished]'
-// type的取值：1 red,2 green,3 yellow,4 blue,5 magenta,6 cyan等等
 c.log = function (info, isErr) {
 	process info....
 };
