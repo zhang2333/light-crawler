@@ -5,11 +5,13 @@
 English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/blob/master/README_zh_CN.md).
 
 ### Install
+
 ```shell
 npm install light-crawler
 ```
 
 ### Simple Example
+
 ```javascript
 var Crawler = require('light-crawler');
 // create a Crawler instance
@@ -37,12 +39,14 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
  * `interval`: crawling interval，defalut: `0`(ms).or a random value in a range e.g.`[200,500]`
  * `retry`: retry times，defalut:`3`
  * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
- * `skipRepetitiveTask`: whether delete the repetitive task(same url)，defalut: `true`
+ * `skipRepetitiveTask`: whether delete the repetitive task(same url)，defalut: `false`
+
 * `requestOpts`: settings of tasks，**every task is processed with these settings**
  * `timeout`: defalut: `10000`
  * `proxy`: proxy address
  * `headers`: headers of request，defalut: `{}`
  * or other settings in [request opts][request-opts]
+
 * `taskCounter`: count all finished tasks whether they are failed or not
 * `failCounter`: count all failed tasks
 * `started`
@@ -50,11 +54,14 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
 * `errLog`: log all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
 * `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
+* `tasksSize`: size of task-pool, exceeding tasks is in the buffer of task-pool, default:`50`
 
 ### Crawler API
 
 * `Crawler(opts: object)`
-construtor of `Crawler`
+
+ construtor of `Crawler`
+ 
 ```javascript
 // e.g.：
 var c = new Crawler({
@@ -69,9 +76,12 @@ var c = new Crawler({
 });
 ```
 * `tweak(opts: object)`
-like foregoing
+
+ like foregoing
 * `addTasks(urls: string or array[, props: obejct])`
-add task into task-pool
+
+ add task into task-pool
+
 ```javascript
 // e.g.：
 c.addTasks('http://www.google.com');
@@ -92,7 +102,9 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'search eng
 }...
 ```
 * `addRule(reg: string, func: function)`
-configure a rule for crawling
+
+ configure a rule for crawling
+
 ```javascript
 // e.g.：
 var tasks = [
@@ -119,7 +131,8 @@ c.addRule(function (result) {
 > Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com`,instead of `www\\.a\\.com`.If you need `.*`,you can use `**`, just like upper example.
 
 * `start(onFinished: function)`
-start the crawler
+
+ start the crawler
 ```javascript
 // e.g.：
 c.start(function () {
@@ -129,16 +142,21 @@ c.start(function () {
 ```
 
 * `pause()`
-pause the crawler
+
+ pause the crawler
 
 * `resume()`
-resume the crawler
+
+ resume the crawler
 
 * `isPaused()`
-the crawler is is paused or not
+
+ the crawler is is paused or not
 
 * `log(info: string, isErr: boolean, type: int)`
-crawler's logger
+
+ crawler's logger
+
 ```javascript
 // e.g.：
 // if it's an error,c.errLog will append it
@@ -183,11 +201,35 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'jpg/mine.jpg'});
 c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 ```
 
+### Events
+
+* `beforeCrawl(task)`
+
+ task's props: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`...so on
+```js
+// e.g.
+c.beforeCrawl = funciton (task) {
+    console.log(task);
+}
+```
+
+* `onDrained()`
+
+ when task-pool and its buffer are drained
+```js
+// e.g.
+c.onDrained = funciton () {
+    // do something
+}
+```
+
 ### Utils API
 
 * `getLinks(html: string)`
-get all links in the element
-```javascript
+
+ get all links in the element
+
+```js
 // e.g.：
 var html = `
   <div>
@@ -212,7 +254,8 @@ var links = Crawler.getLinks($('ul'));
 ```
 
 * `loadHeaders(file: string)`
-load request headers from file
+
+ load request headers from file
 `example.headers`
 ```
 Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8

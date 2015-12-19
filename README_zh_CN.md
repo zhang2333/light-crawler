@@ -9,6 +9,7 @@ npm install light-crawler
 ```
 
 ### 简例
+
 ```javascript
 var Crawler = require('light-crawler');
 // 创建一个Crawler的实例
@@ -37,12 +38,14 @@ c.start(function () {
  * `interval`: 爬取间隔的毫秒值，默认为`0`(毫秒).或者是一个范围内的随机值，如`[200,500]`
  * `retry`: 重试次数，默认为`3`
  * `concurrency`: 并发爬取页面数，默认为`1`
- * `skipRepetitiveTask`: 是否去除重复的任务（相同的url），默认为`true`
+ * `skipRepetitiveTask`: 是否去除重复的任务（相同的url），默认为`false`
+
 * `requestOpts`: 爬取任务的设置，**每个任务都会依照该设置执行**
  * `timeout`: 任务超时时间的毫秒值，默认为`10000`
  * `proxy`: 代理地址
  * `headers`: 请求头信息，默认为`{}`
  * 以及其他所有的[request选项][request-opts]
+
 * `taskCounter`: 记录爬过的页面总数
 * `failCounter`: 记录爬取失败的页面数
 * `started`
@@ -50,11 +53,13 @@ c.start(function () {
 * `errLog`: 记录爬取过程中遇到的异常。单个任务产生的异常不会阻止后面要执行的任务，异常信息会被保留在`errLog`里面，在爬虫结束时输出。
 * `downloadDir`: 下载文件的目录, 默认: `../__dirname`
 * `drainAwait`: 爬虫将在任务池为空时结束，此属性可设置爬虫等待后续需要添加任务的超时时间。默认:`0`(毫秒)
+* `tasksSize`: 任务池的大小，超过的部分会被放入任务池的缓冲池中, 默认:`50`
 
 ### Crawler API
 
 * `Crawler(opts: object)`
-`Crawler`的构造函数，传入的`opts`可以设置`Crawler`的属性
+
+ `Crawler`的构造函数，传入的`opts`可以设置`Crawler`的属性
 ```javascript
 // 例：
 var c = new Crawler({
@@ -69,9 +74,12 @@ var c = new Crawler({
 });
 ```
 * `tweak(opts: object)`
-功能类同`Crawler`构造函数
+
+ 调整`Crawler`参数
 * `addTasks(urls: string or array[, props: obejct])`
-添加任务至任务池中
+
+ 添加任务至任务池中
+ 
 ```javascript
 // 例：
 c.addTasks('http://www.google.com');
@@ -92,7 +100,8 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'SE' });
 }...
 ```
 * `addRule(reg: string, func: function)`
-添加爬取规则及相应的处理函数。
+
+ 添加爬取规则及相应的处理函数。
 ```javascript
 // 例：
 var tasks = [
@@ -119,7 +128,8 @@ c.addRule(function (result) {
 > 需要注意的是light-crawler默认会转换掉规则字符串中所有的`.`。所以你直接写`www.a.com`即可而不必写成`www\\.a\\.com`。如果你需要用到`.*`，那么写成`**`即可，如上述例子。
 
 * `start(callback: function)`
-启动爬虫，并指定完成时的回调函数
+
+ 启动爬虫，并指定完成时的回调函数
 ```javascript
 // 例：
 c.start(function () {
@@ -129,18 +139,23 @@ c.start(function () {
 ```
 
 * `pause()`
-暂停爬虫任务
+
+ 暂停爬虫任务
 
 * `resume()`
-继续爬虫任务
+
+ 继续爬虫任务
 
 * `isPaused()`
-爬虫是否被暂停
+
+ 爬虫是否被暂停
 
 * `log(info: string, isErr: boolean, type: int)`
-Crawler's logger
+
+ Crawler's logger
+ 
 ```javascript
-// e.g.：
+// 例：
 // 如果这一条log是errorlog，那么c.errLog会追加它
 c.log('some problems', true);
 // 控制台输出: 
@@ -165,9 +180,10 @@ c.log = function (info, isErr) {
 ```
 
 ### 下载文件
+
 为task添加`downloadTask: true`的属性即可
 ```javascript
-// e.g.：
+// 例：
 // 指定下载目录
 c.tweak({ downloadDir: 'D:\\yyy' });
 
@@ -183,10 +199,34 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'jpg/mine.jpg'});
 c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 ```
 
+### 事件
+
+* `beforeCrawl(task)`
+
+ task属性: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`等
+```js
+// 例
+c.beforeCrawl = funciton (task) {
+    console.log(task);
+}
+```
+
+* `onDrained()`
+
+ 任务池及其缓冲池为空时
+```js
+// 例
+c.onDrained = funciton () {
+    // do something
+}
+```
+
 ### Utils API
 
 * `getLinks(html: string)`
-获取HTML中某元素下的所有链接地址
+
+ 获取HTML中某元素下的所有链接地址
+ 
 ```javascript
 // 例：
 var html = `
@@ -212,8 +252,10 @@ var links = Crawler.getLinks($('ul'));
 ```
 
 * `loadHeaders(file: string)`
-从文件加载headers
-`example.headers`headers文件示例
+
+ 从文件加载headers
+ 
+ `example.headers`headers文件示例
 ```
 Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
 Accept-Encoding:gzip, deflate, sdch

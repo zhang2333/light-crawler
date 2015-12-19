@@ -10,13 +10,13 @@ var Crawler = require('../index');
 
 describe('Crawler', function () {
 	describe('#crwal()', function () {
-		this.timeout(80000);
+		this.timeout(100000);
 
 		var c;
 
 		it('simple test: single url', function (done) {
 			var url = 'http://www.google.com';
-			c = new Crawler({ id: 'simple test' });
+			c = new Crawler({ id: 'simple' });
 			c.addTasks(url).addRule(function (result) {
 				expect(result.body).to.be.ok;
                 c.log('[Successful]~~~', false, 2);
@@ -27,9 +27,10 @@ describe('Crawler', function () {
 
 		it('test timeout retry', function (done) {
 			var url = 'http://www.google.com';
-			c = new Crawler({ requestOpts: {
-				timeout: 10
-			}});
+			c = new Crawler({
+                id: 'timeout/retry',
+                requestOpts: { timeout: 10 }
+            });
 			c.addTasks(url).addRule(function (result) {
 				expect(result.body).to.not.exist;
 			}).start(function () {
@@ -38,12 +39,12 @@ describe('Crawler', function () {
 		});
 
 		it('test array interval concurrency', function (done) {
-			c = new Crawler({ interval: [200, 700], concurrency: 2 });
+			c = new Crawler({ id: 'concurrency', interval: [200, 700], concurrency: 2 });
 			c.addTasks(['http://www.baidu.com', 'http://www.google.com'], { type: 'SE' });
-			c.addTasks(['http://www.tudou.com', 'http://www.nhk.or.jp'], { type: 'Other' });
+			c.addTasks(['http://www.sohu.com', 'http://www.nhk.or.jp'], { type: 'Other' });
 			c.addRule(function (result) {
 				expect(result.body).to.be.ok;
-				console.log(result.task.url);
+				c.log('[Parsed]'+result.task.url, false, 4);
 				if (result.task.id <= 2) {
 					expect(result.task.type).to.be.equal('SE');
 				} else {
@@ -56,8 +57,8 @@ describe('Crawler', function () {
 
 		it('test repetitive tasks', function (done) {
 			var urls = ['http://www.baidu.com', 'http://www.baidu.com',
-				'http://www.baidu.com', 'http://www.tudou.com'];
-			c = new Crawler({ interval: 500 });
+				'http://www.baidu.com', 'http://www.google.com'];
+			c = new Crawler({ id: 'repetitive',interval: 500, skipRepetitiveTask: true });
 			c.addTasks(urls).addRule(function (result) { }).start(function () {
 				expect(c.taskCounter).to.be.equal(3);
 				done();
@@ -69,7 +70,7 @@ describe('Crawler', function () {
 		});
 		
 		it('test download', function (done) {
-			c = new Crawler({ id: 'download test' });
+			c = new Crawler({ id: 'download' });
 			var url = 'http://gmade.net/dealer/images/gmade_stealth.jpg';
 			c.addTasks(url, {downloadTask: true, downloadFile: 'test.jpg'});
 			c.start(function () {
@@ -98,6 +99,31 @@ describe('Crawler', function () {
 					c.resume();
 				}, 1000);
 			}, 700);
+		});
+        
+        it('test multi', function (done) {
+			c = new Crawler({ 
+				id: 'multi',
+				interval: 100,
+                tasksSize: 2
+			});
+            var urls = [];
+            for (var i = 0; i < 6; i++) {
+                urls.push('http://www.baidu.com');
+            }
+			c.addTasks(urls).addRule(function (r) {
+				expect(r.body).to.be.ok;
+			}).start(function () {
+				expect(c.taskCounter).to.be.equal(12);
+				done();
+			});
+            var f = true;
+            c.onDrained = function () {
+                if (f) {
+                    c.addTasks(urls);
+                    f = false;
+                }
+            };
 		});
 	});
 });
