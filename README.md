@@ -70,14 +70,14 @@ var c = new Crawler({
 	.... // other props of `crawler.settings`
 	requestOpts: {
 		timeout: 5000,
-		proxy: http://xxx,
+		proxy: 'http://xxx'
 		.... // other props of `crawler.requestOpts`
 	}
 });
 ```
 * `tweak(opts: object)`
 
- like foregoing
+ tweak settings of crawler
 * `addTasks(urls: string or array[, props: obejct])`
 
  add task into task-pool

@@ -68,7 +68,7 @@ var c = new Crawler({
 	.... // 其他`Crawler.settings`属性
 	requestOpts: {
 		timeout: 5000,
-		proxy: http://xxx,
+		proxy: 'http://xxx'
 		.... // 其他`Crawler.requestOpts`属性
 	}
 });
