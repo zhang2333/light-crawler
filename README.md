@@ -39,7 +39,7 @@ In light-crawler,crawling page is called `task`.Task will be put into task-pool 
  * `interval`: crawling interval，defalut: `0`(ms).or a random value in a range e.g.`[200,500]`
  * `retry`: retry times，defalut:`3`
  * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
- * `skipRepetitiveTask`: whether delete the repetitive task(same url)，defalut: `false`
+ * `skipDuplicates`: whether skip the duplicate task(same url)，defalut: `false`
 
 * `requestOpts`: settings of tasks，**every task is processed with these settings**
  * `timeout`: defalut: `10000`
@@ -203,29 +203,29 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 
 ### Events
 
-* `beforeCrawl(task)`
+* `beforeCrawl`
 
  task's props: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`...so on
 ```js
 // e.g.
-c.beforeCrawl = funciton (task) {
+c.on('beforeCrawl', funciton (task) {
     console.log(task);
-}
+});
 ```
 
-* `onDrained()`
+* `drain`
 
  when task-pool and its buffer are drained
 ```js
 // e.g.
-c.onDrained = funciton () {
+c.on('drain', funciton () {
     // do something
 }
 ```
 
 ### Utils API
 
-* `getLinks(html: string)`
+* `getLinks(html: string, baseUrl: string)`
 
  get all links in the element
 
@@ -234,24 +234,28 @@ c.onDrained = funciton () {
 var html = `
   <div>
 	<ul>
-	  <li>
-		<a href="1">1</a>
-		<a href="2">2</a>
-		<a href="3">3</a>
-	  </li>
-	  <li><a href="4">4</a></li>
-	  <li></li>
+		<li>
+            <a href="http://link.com/a/1">1</a>
+            <a href="a/2">2</a>
+            <a href="b/3">3</a>
+		</li>
+		<li><a href="4">4</a></li>
+		<li>foo</li>
 	</ul>
-  </div>
-`);
-var links = Crawler.getLinks(html);
+</div>
+`;
+var links = Crawler.getLinks(html, 'http://link.com/index.html');
 console.log(links);
-// ['1', '2', '3', '4']
+// ['http://link.com/a/1','http://link.com/a/2','http://link.com/b/3','http://link.com/4']
 
 // you can also use cheerio
 var $ = cheerio.load(html);
 var links = Crawler.getLinks($('ul'));
 ```
+
+* `getImages(html: string, baseUrl: string)`
+
+ like `getLinks`, get `src` from `<img>`.
 
 * `loadHeaders(file: string)`
 

@@ -58,7 +58,7 @@ describe('Crawler', function () {
 		it('test repetitive tasks', function (done) {
 			var urls = ['http://www.baidu.com', 'http://www.baidu.com',
 				'http://www.baidu.com', 'http://www.google.com'];
-			c = new Crawler({ id: 'repetitive',interval: 500, skipRepetitiveTask: true });
+			c = new Crawler({ id: 'repetitive',interval: 500, skipDuplicates: true });
 			c.addTasks(urls).addRule(function (result) { }).start(function () {
 				expect(c.taskCounter).to.be.equal(3);
 				done();
@@ -118,12 +118,12 @@ describe('Crawler', function () {
 				done();
 			});
             var f = true;
-            c.onDrained = function () {
+            c.on('drain', function () {
                 if (f) {
                     c.addTasks(urls);
                     f = false;
                 }
-            };
+            });
 		});
 	});
 });

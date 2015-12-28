@@ -38,7 +38,7 @@ c.start(function () {
  * `interval`: 爬取间隔的毫秒值，默认为`0`(毫秒).或者是一个范围内的随机值，如`[200,500]`
  * `retry`: 重试次数，默认为`3`
  * `concurrency`: 并发爬取页面数，默认为`1`
- * `skipRepetitiveTask`: 是否去除重复的任务（相同的url），默认为`false`
+ * `skipDuplicates`: 是否去除重复的任务（相同的url），默认为`false`
 
 * `requestOpts`: 爬取任务的设置，**每个任务都会依照该设置执行**
  * `timeout`: 任务超时时间的毫秒值，默认为`10000`
@@ -201,55 +201,59 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 
 ### 事件
 
-* `beforeCrawl(task)`
+* `beforeCrawl`
 
  task属性: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`等
 ```js
 // 例
-c.beforeCrawl = funciton (task) {
+c.on('beforeCrawl', funciton (task) {
     console.log(task);
 }
 ```
 
-* `onDrained()`
+* `drain`
 
  任务池及其缓冲池为空时
 ```js
 // 例
-c.onDrained = funciton () {
+c.on('drain', funciton () {
     // do something
 }
 ```
 
 ### Utils API
 
-* `getLinks(html: string)`
+* `getLinks(html: string, baseUrl: string)`
 
  获取HTML中某元素下的所有链接地址
- 
-```javascript
-// 例：
+
+```js
+// e.g.：
 var html = `
   <div>
 	<ul>
-	  <li>
-		<a href="1">1</a>
-		<a href="2">2</a>
-		<a href="3">3</a>
-	  </li>
-	  <li><a href="4">4</a></li>
-	  <li></li>
+		<li>
+            <a href="http://link.com/a/1">1</a>
+            <a href="a/2">2</a>
+            <a href="b/3">3</a>
+		</li>
+		<li><a href="4">4</a></li>
+		<li>foo</li>
 	</ul>
-  </div>
-`);
-var links = Crawler.getLinks(html);
+</div>
+`;
+var links = Crawler.getLinks(html, 'http://link.com/index.html');
 console.log(links);
-// ['1', '2', '3', '4']
+// ['http://link.com/a/1','http://link.com/a/2','http://link.com/b/3','http://link.com/4']
 
 // 也可以配合cheerio一起使用
 var $ = cheerio.load(html);
 var links = Crawler.getLinks($('ul'));
 ```
+
+* `getImages(html: string, baseUrl: string)`
+
+ 与 `getLinks` 相仿, 从 `<img>` 得到 `src`
 
 * `loadHeaders(file: string)`
 
