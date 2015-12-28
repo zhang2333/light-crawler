@@ -1,6 +1,8 @@
-## Light Crawler - Simplified Crawler
+## Light Crawler - Directed Crawler
 
 [![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
+
+A simplified directed web crawler, easy to use for scraping pages and downloading resources.
 
 English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/blob/master/README_zh_CN.md).
 
@@ -10,20 +12,20 @@ English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/b
 npm install light-crawler
 ```
 
-### Simple Example
+### Example
 
 ```javascript
 var Crawler = require('light-crawler');
 // create a Crawler instance
 var c = new Crawler();
-// add a url or array of url for crawling
+// add a url or array of url to request
 c.addTasks('http://www.xxx.com');
-// define a crawling rule and processing funciton
+// define a scraping rule
 c.addRule(function (result) {
 	// result has 2 props : task and body
 	// result.task's props : id, url, others you added.
-	// result.body is the HTML of the crawling page
-	process result.body... // you can use cheerio
+	// result.body is the HTML of the page
+	scrape result.body... // you can use cheerio
 })
 // start your crawler
 c.start(function () {
@@ -32,7 +34,7 @@ c.start(function () {
 ```
 ### Crawler Property
 
-In light-crawler,crawling page is called `task`.Task will be put into task-pool and be executed in order.
+In light-crawler,requesting page is called `task`.Task will be put into task-pool and be executed in order.
 
 * `settings`: crawler's basic settings
  * `id`: crawler's id,integer or string，defalut: `null`
@@ -103,7 +105,7 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'search eng
 ```
 * `addRule(reg: string, func: function)`
 
- configure a rule for crawling
+ define a rule for scraping
 
 ```javascript
 // e.g.：
@@ -116,16 +118,13 @@ var tasks = [
 c.addTasks(tasks);
 c.addRule('http://www.google.com/[0-9]*', function (result) {
 	// match to tasks[0] and tasks[1]
-	// process result.body
 });
 c.addRule('http://www.google.com/info/**', function (result) {
 	// match to tasks[2] and tasks[3]
-	// process result.body
 });
 // or you can not define the rule
 c.addRule(function (result) {
 	// match to all url in tasks
-	// process result.body
 });
 ```
 > Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com`,instead of `www\\.a\\.com`.If you need `.*`,you can use `**`, just like upper example.
@@ -178,7 +177,7 @@ c.afterLog = function (info, isErr) {
 
 // even you can replace the log()
 c.log = function (info, isErr, type) {
-	process info....
+	// log something....
 };
 ```
 
@@ -203,12 +202,12 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 
 ### Events
 
-* `beforeCrawl`
+* `beforeScrape`
 
  task's props: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`...so on
 ```js
 // e.g.
-c.on('beforeCrawl', funciton (task) {
+c.on('beforeScrape', funciton (task) {
     console.log(task);
 });
 ```

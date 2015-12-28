@@ -1,13 +1,16 @@
 {
   "name": "light-crawler",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "author": "LouisZhang <spade9k@gmail.com>",
-  "description": "a simplified web crawler, easy to use for crawling pages and downloading resources.",
+  "description": "a simplified directed web crawler, easy to use for scraping pages and downloading resources.",
   "keywords": [
     "crawler",
     "spider",
-    "simple",
-    "queue"
+    "simplified",
+    "queue",
+    "directed",
+    "scraping",
+    "downloading"
   ],
   "dependencies": {
     "bluebird": "^3.0.6",

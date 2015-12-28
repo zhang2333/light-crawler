@@ -1,4 +1,4 @@
-## light-crawler 中文文档
+## Light Crawler - 简易定向爬虫
 
 [![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
 
