@@ -40,16 +40,17 @@ c.start(function () {
  * `concurrency`: 并发爬取页面数，默认为`1`
  * `skipDuplicates`: 是否去除重复的任务（相同的url），默认为`false`
 
-* `requestOpts`: 爬取任务的设置，**每个任务都会依照该设置执行**
+* `requestOpts`: 爬取任务的设置，**这是全局request参数**
  * `timeout`: 任务超时时间的毫秒值，默认为`10000`
  * `proxy`: 代理地址
  * `headers`: 请求头信息，默认为`{}`
  * 以及其他所有的[request选项][request-opts]
 
-* `taskCounter`: 记录爬过的页面总数
-* `failCounter`: 记录爬取失败的页面数
-* `started`
-* `finished`
+* `taskCounter`: 记录爬过的任务数
+* `failCounter`: 记录爬取失败的任务数
+* `doneCounter`: 记录已正常完成的任务数
+* `started`： boolean
+* `finished`： boolean
 * `errLog`: 记录爬取过程中遇到的异常。单个任务产生的异常不会阻止后面要执行的任务，异常信息会被保留在`errLog`里面，在爬虫结束时输出。
 * `downloadDir`: 下载文件的目录, 默认: `../__dirname`
 * `drainAwait`: 爬虫将在任务池为空时结束，此属性可设置爬虫等待后续需要添加任务的超时时间。默认:`0`(毫秒)
@@ -98,6 +99,9 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'SE' });
 	}
 	...
 }...
+
+// 或者给任务指定request参数（将覆盖全局的）
+c.addTasks('http://www.google.com', { requestOpts: { timeout: 1 } });
 ```
 * `addRule(reg: string, func: function)`
 

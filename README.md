@@ -43,7 +43,7 @@ In light-crawler,requesting page is called `task`.Task will be put into task-poo
  * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
  * `skipDuplicates`: whether skip the duplicate task(same url)，defalut: `false`
 
-* `requestOpts`: settings of tasks，**every task is processed with these settings**
+* `requestOpts`: request options of task，**this is global request options**
  * `timeout`: defalut: `10000`
  * `proxy`: proxy address
  * `headers`: headers of request，defalut: `{}`
@@ -51,8 +51,9 @@ In light-crawler,requesting page is called `task`.Task will be put into task-poo
 
 * `taskCounter`: count all finished tasks whether they are failed or not
 * `failCounter`: count all failed tasks
-* `started`
-* `finished`
+* `doneCounter`: count tasks which has done
+* `started`： boolean
+* `finished`： boolean
 * `errLog`: log all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
 * `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
@@ -102,6 +103,9 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'search eng
 	}
 	...
 }...
+
+// or set request options for the task(will override global)
+c.addTasks('http://www.google.com', { requestOpts: { timeout: 1 } });
 ```
 * `addRule(reg: string, func: function)`
 

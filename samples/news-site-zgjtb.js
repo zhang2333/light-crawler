@@ -22,11 +22,8 @@ c.addTasks(urls);
 
 c.addRule('http://www.zgjtb.com/gonglu/node_123[_]?[0-9]*.htm', function (data) {
 	var $ = cheerio.load(data.body);
-	var links = Crawler.getLinks($('.p-list .p-li-ul'));
+	var links = Crawler.getLinks($('.p-list .p-li-ul'), u);
 	links = links.slice(0, 3);
-	links = links.map(function (link) {
-		return 'http://www.zgjtb.com/gonglu/' + link;
-	});
 	c.addTasks(links);
 });
 
