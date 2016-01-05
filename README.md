@@ -174,7 +174,7 @@ c.log('[Parsed]blahblah~', false, 4);
 // [c.settings.id if it has][Parsed]([Parsed] wil be blue)blahblah~
 
 // you can do something after log() everytime
-c.afterLog = function (info, isErr) {
+c.on('afterLog', function (info, isErr, type) {
 	fs.appendFileSync('c.log', info); // append info to c.log
 	....
 };

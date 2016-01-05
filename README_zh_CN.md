@@ -172,7 +172,7 @@ c.log('[已解析]blahblah~', false, 4);
 // [c.settings.id]（如果爬虫有id）[已解析]([已解析]将是蓝色的)blahblah~
 
 // 你可以在每次log()之后做一些操作
-c.afterLog = function (info, isErr) {
+c.on('afterLog', function (info, isErr, type) {
 	fs.appendFileSync('c.log', info); // 将会追加到c.log
 	....
 };
