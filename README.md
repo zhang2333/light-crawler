@@ -107,7 +107,7 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'search eng
 // or set request options for the task(will override global)
 c.addTasks('http://www.google.com', { requestOpts: { timeout: 1 } });
 ```
-* `addRule(reg: string, func: function)`
+* `addRule(reg: string|object, func: function)`
 
  define a rule for scraping
 
@@ -129,6 +129,17 @@ c.addRule('http://www.google.com/info/**', function (result) {
 // or you can not define the rule
 c.addRule(function (result) {
 	// match to all url in tasks
+});
+
+// since 1.5.10, the rule of scraping could be a object
+c.addTasks('http://www.baidu.com', { name: 'baidu', type: 'S.E.' });
+c.addTasks('http://www.google.com', { name: 'google', type: 'S.E.' });
+// following rules has same reg string, but name are different
+c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
+    // scraping r.body
+});
+c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
+    // scraping r.body
 });
 ```
 > Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com`,instead of `www\\.a\\.com`.If you need `.*`,you can use `**`, just like upper example.
@@ -206,12 +217,12 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 
 ### Events
 
-* `beforeScrape`
+* `beforeCrawl`
 
  task's props: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`...so on
 ```js
 // e.g.
-c.on('beforeScrape', funciton (task) {
+c.on('beforeCrawl', funciton (task) {
     console.log(task);
 });
 ```

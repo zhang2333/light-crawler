@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 	
 var Crawler = require('../index');
 
-describe('utils', function () {
+describe('Utils', function () {
 	it('#getLinks()', function () {
 		var html= `
 			<div>

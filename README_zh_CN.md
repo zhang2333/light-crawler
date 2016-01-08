@@ -18,8 +18,8 @@ var c = new Crawler();
 c.addTasks('http://www.xxx.com');
 // 定义一个处理数据的函数
 c.addRule(function (result) {
-	// 这里返回的data有task和body两个属性
-        // result.task的属性 : id, url, 以及其他你添加的
+	// 这里返回的result有task和body两个属性
+    // result.task的属性 : id, url, 以及其他你添加的
 	// result.body就是爬取页面得到的html代码
 	在这里处理result.body... // 你可以使用cheerio
 })
@@ -103,9 +103,9 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'SE' });
 // 或者给任务指定request参数（将覆盖全局的）
 c.addTasks('http://www.google.com', { requestOpts: { timeout: 1 } });
 ```
-* `addRule(reg: string, func: function)`
+* `addRule(reg: string|object, scrape: function)`
 
- 添加爬取规则及相应的处理函数。
+ 添加一个规则以匹配某些任务，并使用定义好的函数来处理得到的数据
 ```javascript
 // 例：
 var tasks = [
@@ -127,6 +127,17 @@ c.addRule('http://www.google.com/info/**', function (result) {
 c.addRule(function (result) {
 	// 将匹配到tasks中所有的url
 	// 处理result.body
+});
+
+// 从1.5.10开始，匹配规则得到了扩展，匹配规则将不局限于匹配任务的url属性
+c.addTasks('http://www.baidu.com', { name: 'baidu', type: '搜索引擎' });
+c.addTasks('http://www.google.com', { name: 'google', type: '搜索引擎' });
+// 你可能已经注意到了，下面的两个正则是同样的，而name值却不同
+c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
+    // 处理result.body
+});
+c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
+    // 处理result.body
 });
 ```
 > 需要注意的是light-crawler默认会转换掉规则字符串中所有的`.`。所以你直接写`www.a.com`即可而不必写成`www\\.a\\.com`。如果你需要用到`.*`，那么写成`**`即可，如上述例子。
@@ -178,7 +189,7 @@ c.on('afterLog', function (info, isErr, type) {
 };
 
 // 你甚至可以把log()覆盖为自定义的
-c.log = function (info, isErr) {
+c.log = function (info, isErr, type) {
 	process info....
 };
 ```
@@ -207,7 +218,7 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 
 * `beforeCrawl`
 
- task属性: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`等
+ 每个任务在发起请求前被触发。task属性: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`等
 ```js
 // 例
 c.on('beforeCrawl', funciton (task) {
