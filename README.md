@@ -16,14 +16,14 @@ npm install light-crawler
 
 ```javascript
 var Crawler = require('light-crawler');
-// create a Crawler instance
+// create a instance of Crawler
 var c = new Crawler();
-// add a url or array of url to request
+// add a url or an array to request
 c.addTasks('http://www.xxx.com');
 // define a scraping rule
 c.addRule(function (result) {
 	// result has 2 props : task and body
-	// result.task's props : id, url, others you added.
+	// result.task: id, url, others you added.
 	// result.body is the HTML of the page
 	scrape result.body... // you can use cheerio
 })
@@ -34,10 +34,10 @@ c.start(function () {
 ```
 ### Crawler Property
 
-In light-crawler,requesting page is called `task`.Task will be put into task-pool and be executed in order.
+In light-crawler,requesting page is called `task`.Tasks will be put into task-pool and be executed in order.
 
-* `settings`: crawler's basic settings
- * `id`: crawler's id,integer or string，defalut: `null`
+* `settings`: basic settings of crawler
+ * `id`: id of the crawler,integer or string，defalut: `null`
  * `interval`: crawling interval，defalut: `0`(ms).or a random value in a range e.g.`[200,500]`
  * `retry`: retry times，defalut:`3`
  * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
@@ -54,7 +54,7 @@ In light-crawler,requesting page is called `task`.Task will be put into task-poo
 * `doneCounter`: count tasks which has done
 * `started`： boolean
 * `finished`： boolean
-* `errLog`: log all error infos in crawling
+* `errLog`: record all error infos in crawling
 * `downloadDir`: downloaded files in here, default: `../__dirname`
 * `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
 * `tasksSize`: size of task-pool, exceeding tasks is in the buffer of task-pool, default:`50`
@@ -94,11 +94,11 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com']);
 // add props for a task
 c.addTasks('http://www.google.com', { disc: 'google' });
 // add same props for tasks
-c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'search engine' });
+c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'searching engine' });
 // get these props in processing function
 ..function (result) {
-	if (result.task.type == 'search engine') {
-		console.log(result.task.url + ' is a S.E. site.');
+	if (result.task.type == 'searching engine') {
+		console.log(result.task.url + ' is a site that powered by S.E.');
 		...
 	}
 	...
@@ -141,8 +141,21 @@ c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
 c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
     // scraping r.body
 });
+
+// using function match could make rules more complex
+// boolean match(task)
+c.addTasks('http://www.baidu.com', { tag: 3 });
+c.addTasks('http://www.google.com', { tag: 50 });
+c.addRule({ 
+    reg: 'www.**.com', 
+    match: function (task) {
+        return task.tag > 10;
+    }}, function (r) {
+    // scrape google
+});
 ```
-> Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com`,instead of `www\\.a\\.com`.If you need `.*`,you can use `**`, just like upper example.
+> Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com` instead of `www\\.a\\.com`.
+If you need `.*`,you can use `**`, just like the upper example.If you have to use `.`,just `<.>`.
 
 * `start(onFinished: function)`
 
@@ -237,6 +250,8 @@ c.on('drain', funciton () {
 }
 ```
 
+* `error`
+
 ### Utils API
 
 * `getLinks(html: string, baseUrl: string)`
@@ -287,7 +302,7 @@ Upgrade-Insecure-Requests:1
 User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64)
 ...
 ```
-load this file and set headers for request
+load this file and set headers for requesting
 ```js
 var headers = Crawler.loadHeaders('example.headers');
 c.tweak({

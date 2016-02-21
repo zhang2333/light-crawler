@@ -139,8 +139,21 @@ c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
 c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
     // 处理result.body
 });
+
+// 指定名为match的函数可设置更为复杂的匹配规则
+// match函数接受参数task，返回一个布尔值
+c.addTasks('http://www.baidu.com', { tag: 3 });
+c.addTasks('http://www.google.com', { tag: 50 });
+c.addRule({ 
+    reg: 'www.**.com', 
+    match: function (task) {
+        return task.tag > 10;
+    }}, function (r) {
+    // 处理google
+});
 ```
-> 需要注意的是light-crawler默认会转换掉规则字符串中所有的`.`。所以你直接写`www.a.com`即可而不必写成`www\\.a\\.com`。如果你需要用到`.*`，那么写成`**`即可，如上述例子。
+> 需要注意的是light-crawler默认会转换掉规则字符串中所有的`.`。所以你直接写`www.a.com`即可而不必写成`www\\.a\\.com`。
+如果你需要用到`.*`，那么写成`**`即可，如上述例子。如果一定要使用`.`，请用`<.>`代替。
 
 * `start(callback: function)`
 
@@ -235,6 +248,8 @@ c.on('drain', funciton () {
     // do something
 }
 ```
+
+* `error`
 
 ### Utils API
 
