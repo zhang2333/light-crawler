@@ -221,9 +221,9 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
  after the crawler is started
 ```js
 // e.g.
-c.on('start', funciton () {
+c.on('start', function () {
     console.log('started!');
-}
+});
 ```
 
 * `beforeCrawl`
@@ -231,7 +231,7 @@ c.on('start', funciton () {
  task's props: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`...so on
 ```js
 // e.g.
-c.on('beforeCrawl', funciton (task) {
+c.on('beforeCrawl', function (task) {
     console.log(task);
 });
 ```
@@ -241,9 +241,9 @@ c.on('beforeCrawl', funciton (task) {
  when task-pool and its buffer are drained
 ```js
 // e.g.
-c.on('drain', funciton () {
+c.on('drain', function () {
     // do something
-}
+});
 ```
 
 * `error`

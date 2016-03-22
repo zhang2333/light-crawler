@@ -221,9 +221,9 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 
 ```js
 // 例
-c.on('start', funciton () {
+c.on('start', function () {
     console.log('爬虫已开始工作！');
-}
+});
 ```
 
 * `beforeCrawl`
@@ -231,9 +231,9 @@ c.on('start', funciton () {
  每个任务在发起请求前被触发。task属性: `id`,`url`,`retry`,`working`,`requestOpts`,`downloadTask`,`downloadFile`等
 ```js
 // 例
-c.on('beforeCrawl', funciton (task) {
+c.on('beforeCrawl', function (task) {
     console.log(task);
-}
+});
 ```
 
 * `drain`
@@ -241,9 +241,9 @@ c.on('beforeCrawl', funciton (task) {
  任务池及其缓冲池为空时
 ```js
 // 例
-c.on('drain', funciton () {
+c.on('drain', function () {
     // do something
-}
+});
 ```
 
 * `error`
