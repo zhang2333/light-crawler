@@ -15,7 +15,8 @@ describe('Crawler', function () {
         it('simple', function (done) {
             var url = 'http://www.google.com';
             var c = new Crawler({ id: 'simple' });
-            c.addTasks(url).addRule(function (result) {
+            c.addTasks(url).addRule(function (result, $) {
+                expect($('title').text()).to.be.ok;
                 expect(result.body).to.be.ok;
                 c.log('[Successful]~~~', false, 2);
             }).start(function () {
@@ -111,6 +112,30 @@ describe('Crawler', function () {
             });
         });
         
+        it('#loadRule()', function (done) {
+            c = new Crawler({
+                id: '#loadRule()'
+            });
+            
+            c.addTasks('http://www.google.com', { name: 'google' });
+            
+            var crawlingGoogle = {
+                reg: 'www.**.com',
+                name: 'google',
+                scrape: function (r, $, callback) {
+                    callback($('title').text());
+                }
+            };
+            
+            c.loadRule(crawlingGoogle, function (text) {
+                expect(text).to.be.ok;
+            });
+            
+            c.start(function () {
+                done();
+            });
+        });
+        
         it('#pause/resume()', function (done) {
             c = new Crawler({
                 id: '#pause/resume()',
@@ -131,6 +156,29 @@ describe('Crawler', function () {
                     c.resume();
                 }, 1000);
             }, 700);
+        });
+        
+        it('#stop()', function (done) {
+            c = new Crawler({
+                id: '#stop()',
+                interval: 100,
+                concurrency: 2
+            });
+            var urls = [];
+            for (var i = 0; i < 4; i++) {
+                urls.push('http://www.baidu.com');
+            }
+            
+            c.on('start', function () {
+                c.stop();
+            });
+            
+            c.addTasks(urls).addRule(function (r) {
+                expect(r.body).to.be.ok;
+            }).start(function () {
+                expect(c.taskCounter).to.be.equal(2);
+                done();
+            });
         });
 
         it('#drainAwait()', function (done) {

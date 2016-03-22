@@ -1,6 +1,6 @@
 {
   "name": "light-crawler",
-  "version": "1.5.11",
+  "version": "1.6.0",
   "author": "LouisZhang <spade9k@gmail.com>",
   "description": "a simplified directed web crawler, easy to use for scraping pages and downloading resources.",
   "keywords": [
@@ -13,15 +13,15 @@
     "downloading"
   ],
   "dependencies": {
-    "bluebird": "^3.0.6",
+    "bluebird": "^3.3.4",
     "cheerio": "^0.19.0",
-    "lodash": "^3.10.1",
-    "request": "^2.67.0",
-    "request-promise": "^1.0.2"
+    "lodash": "^4.6.1",
+    "request": "^2.69.0",
+    "request-promise": "^2.0.1"
   },
   "devDependencies": {
-    "chai": "^3.4.1",
-    "mocha": "^2.3.3"
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
   },
   "directories": {
     "lib": "lib"

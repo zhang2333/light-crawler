@@ -131,27 +131,9 @@ c.addRule(function (result) {
 	// match to all url in tasks
 });
 
-// since 1.5.10, the rule of scraping could be a object
-c.addTasks('http://www.baidu.com', { name: 'baidu', type: 'S.E.' });
-c.addTasks('http://www.google.com', { name: 'google', type: 'S.E.' });
-// following rules has same reg string, but name are different
-c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
-    // scraping r.body
-});
-c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
-    // scraping r.body
-});
-
-// using function match could make rules more complex
-// boolean match(task)
-c.addTasks('http://www.baidu.com', { tag: 3 });
-c.addTasks('http://www.google.com', { tag: 50 });
-c.addRule({ 
-    reg: 'www.**.com', 
-    match: function (task) {
-        return task.tag > 10;
-    }}, function (r) {
-    // scrape google
+// $(i.e. cheerio.load(result.body)) is a optional arg
+c.addRule(function (result, $){
+    console.log($('title').text());
 });
 ```
 > Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com` instead of `www\\.a\\.com`.
@@ -179,6 +161,10 @@ c.start(function () {
 * `isPaused()`
 
  the crawler is is paused or not
+ 
+ * `stop()`
+
+ stop the crawler
 
 * `log(info: string, isErr: boolean, type: int)`
 
@@ -229,6 +215,16 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 ```
 
 ### Events
+
+* `start`
+
+ after the crawler is started
+```js
+// e.g.
+c.on('start', funciton () {
+    console.log('started!');
+}
+```
 
 * `beforeCrawl`
 
@@ -309,6 +305,80 @@ c.tweak({
 	requestOpts: {
 		headers: headers
 	}
+});
+```
+
+* `getRegWithPath(fromUrl: string)`
+
+ get reg string with path of fromUrl
+ 
+```js
+var reg = Crawler.getRegWithPath('http://www.google.com/test/something.html');
+// reg: http://www.google.com/test/**
+```
+
+### Advanced Usage
+
+* `addRule`
+
+```js
+// since 1.5.10, the rule of scraping could be a object
+c.addTasks('http://www.baidu.com', { name: 'baidu', type: 'S.E.' });
+c.addTasks('http://www.google.com', { name: 'google', type: 'S.E.' });
+// following rules has same reg string, but name are different
+c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
+    // scraping r.body
+});
+c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
+    // scraping r.body
+});
+
+// using function match could make rules more complex
+// boolean match(task)
+c.addTasks('http://www.baidu.com', { tag: 3 });
+c.addTasks('http://www.google.com', { tag: 50 });
+c.addRule({ 
+    reg: 'www.**.com', 
+    match: function (task) {
+        return task.tag > 10;
+    }}, function (r) {
+    // scrape google
+});
+```
+
+* `loadRule`
+ recycle rules
+
+```js
+// lc-rules.js
+exports.crawlingGoogle = {
+    reg: 'www.**.com',
+    name: 'google',
+    scrape: function (r, $) {
+        // ...
+    }
+};
+
+// crawler.js
+var c = new Crawler();
+c.addTasks('http://www.google.com', { name: 'google' });
+c.loadRule(crawlingGoogle);
+
+// or expand the function named 'scrape'
+// implement the 'expand' in 'loadRule'
+crawlingGoogle = {
+    // ...
+    scrape: function (r, $, expand) {
+        expand($('title').text());
+    }
+};
+
+crawlerAAA.loadRule(crawlingGoogle, function (text) {
+    console.log(text);
+});
+
+crawlerBBB.loadRule(crawlingGoogle, function (text) {
+    console.log(text.toLowerCase());
 });
 ```
 

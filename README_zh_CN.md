@@ -129,27 +129,9 @@ c.addRule(function (result) {
 	// 处理result.body
 });
 
-// 从1.5.10开始，匹配规则得到了扩展，匹配规则将不局限于匹配任务的url属性
-c.addTasks('http://www.baidu.com', { name: 'baidu', type: '搜索引擎' });
-c.addTasks('http://www.google.com', { name: 'google', type: '搜索引擎' });
-// 你可能已经注意到了，下面的两个正则是同样的，而name值却不同
-c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
-    // 处理result.body
-});
-c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
-    // 处理result.body
-});
-
-// 指定名为match的函数可设置更为复杂的匹配规则
-// match函数接受参数task，返回一个布尔值
-c.addTasks('http://www.baidu.com', { tag: 3 });
-c.addTasks('http://www.google.com', { tag: 50 });
-c.addRule({ 
-    reg: 'www.**.com', 
-    match: function (task) {
-        return task.tag > 10;
-    }}, function (r) {
-    // 处理google
+// 处理函数可以添加一个可选参数`$`，`$`即`cheerio.load(result.body)`
+c.addRule(function (result, $){
+    console.log($('title').text());
 });
 ```
 > 需要注意的是light-crawler默认会转换掉规则字符串中所有的`.`。所以你直接写`www.a.com`即可而不必写成`www\\.a\\.com`。
@@ -177,6 +159,10 @@ c.start(function () {
 * `isPaused()`
 
  爬虫是否被暂停
+ 
+ * `stop()`
+
+ 停止爬虫
 
 * `log(info: string, isErr: boolean, type: int)`
 
@@ -228,6 +214,17 @@ c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 ```
 
 ### 事件
+
+* `start`
+
+ 爬虫开始运行后触发
+
+```js
+// 例
+c.on('start', funciton () {
+    console.log('爬虫已开始工作！');
+}
+```
 
 * `beforeCrawl`
 
@@ -309,6 +306,82 @@ c.tweak({
 	requestOpts: {
 		headers: headers
 	}
+});
+```
+
+* `getRegWithPath(fromUrl: string)`
+
+ 根据url得到该路径的规则字符串
+ 
+```js
+var reg = Crawler.getRegWithPath('http://www.google.com/test/something.html');
+// reg: http://www.google.com/test/**
+```
+
+### 进阶用法
+
+* `addRule`
+ `addRule`的更多用法
+
+```js
+// 从1.5.10开始，匹配规则得到了扩展，匹配规则将不局限于匹配任务的url属性
+c.addTasks('http://www.baidu.com', { name: 'baidu', type: '搜索引擎' });
+c.addTasks('http://www.google.com', { name: 'google', type: '搜索引擎' });
+// 你可能已经注意到了，下面的两个正则是同样的，而name值却不同
+// 不过属性的命名最好避免 'reg' 'match' 'scrape' 'expand'
+c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
+    // 处理result.body
+});
+c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
+    // 处理result.body
+});
+
+// 指定名为match的函数可设置更为复杂的匹配规则
+// match函数接受参数task，返回一个布尔值
+c.addTasks('http://www.baidu.com', { tag: 3 });
+c.addTasks('http://www.google.com', { tag: 50 });
+c.addRule({ 
+    reg: 'www.**.com', 
+    match: function (task) {
+        return task.tag > 10;
+    }}, function (r) {
+    // 处理google
+});
+```
+
+* `loadRule`
+ 可重复利用同一Rule
+
+```js
+// lc-rules.js
+exports.crawlingGoogle = {
+    reg: 'www.**.com',
+    name: 'google',
+    scrape: function (r, $) {
+        // ...
+    }
+};
+
+// crawler.js
+var c = new Crawler();
+c.addTasks('http://www.google.com', { name: 'google' });
+c.loadRule(crawlingGoogle);
+
+// 或者可以对同一规则进行不同扩展，不过scrape需要第三个参数
+// 在loadRule中实现该扩展即可
+crawlingGoogle = {
+    // ...
+    scrape: function (r, $, expand) {
+        expand($('title').text());
+    }
+};
+
+crawlerAAA.loadRule(crawlingGoogle, function (text) {
+    console.log(text);
+});
+
+crawlerBBB.loadRule(crawlingGoogle, function (text) {
+    console.log(text.toLowerCase());
 });
 ```
 
