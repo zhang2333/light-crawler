@@ -112,6 +112,25 @@ describe('Crawler', function () {
             });
         });
         
+        it('#removeRule()', function (done) {
+            c = new Crawler({
+                id: '#removeRule()',
+                interval: 500
+            });
+            c.addTasks('http://www.baidu.com', { name: 'baidu' });
+            var counter = 0;
+            c.addRule({ reg: 'www.**.com', ruleName: 'baidu', name: 'baidu' }, function (r) {
+                if (r.body) {
+                    counter++;
+                }
+            });
+            c.removeRule('baidu');
+            c.start(function () {
+                expect(counter).to.be.equal(0);
+                done();
+            });
+        });
+        
         it('#loadRule()', function (done) {
             c = new Crawler({
                 id: '#loadRule()'

@@ -162,9 +162,13 @@ c.start(function () {
 
  the crawler is is paused or not
  
- * `stop()`
+* `stop()`
 
  stop the crawler
+ 
+* `uniqTasks()`
+
+ reomve duplicate task(deeply compare)
 
 * `log(info: string, isErr: boolean, type: int)`
 
@@ -347,6 +351,7 @@ c.addRule({
 ```
 
 * `loadRule`
+
  recycle rules
 
 ```js
@@ -366,6 +371,7 @@ c.loadRule(crawlingGoogle);
 
 // or expand the function named 'scrape'
 // implement the 'expand' in 'loadRule'
+// on the other hand, you can use 'this'(Crawler) in 'addRule' or 'loadRule'
 crawlingGoogle = {
     // ...
     scrape: function (r, $, expand) {
@@ -375,11 +381,27 @@ crawlingGoogle = {
 
 crawlerAAA.loadRule(crawlingGoogle, function (text) {
     console.log(text);
+    this.addTasks('www.abc.com');
 });
 
 crawlerBBB.loadRule(crawlingGoogle, function (text) {
     console.log(text.toLowerCase());
 });
+```
+
+* `removeRule`
+
+ remove some rules
+
+```js
+// by its 'ruleName'
+var rule = {
+    // ...
+    ruleName: 'someone'
+    // ...
+}
+c.loadRule(rule);
+c.removeRule('someone');
 ```
 
 [request-opts]: https://github.com/request/request#requestoptions-callback

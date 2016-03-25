@@ -160,9 +160,13 @@ c.start(function () {
 
  爬虫是否被暂停
  
- * `stop()`
+* `stop()`
 
  停止爬虫
+ 
+* `uniqTasks()`
+
+ 去重当前任务队列(深度比较)
 
 * `log(info: string, isErr: boolean, type: int)`
 
@@ -321,6 +325,7 @@ var reg = Crawler.getRegWithPath('http://www.google.com/test/something.html');
 ### 进阶用法
 
 * `addRule`
+
  `addRule`的更多用法
 
 ```js
@@ -350,7 +355,8 @@ c.addRule({
 ```
 
 * `loadRule`
- 可重复利用同一Rule
+
+ 加载Rule，意味着你可以重复利用同一个Rule
 
 ```js
 // lc-rules.js
@@ -369,7 +375,8 @@ c.loadRule(crawlingGoogle);
 
 // 或者可以对同一规则进行不同扩展，不过scrape需要第三个参数
 // 在loadRule中实现该扩展即可
-crawlingGoogle = {
+// 另外，如果你需要在'addRule'或'loadRule'的处理函数中使用爬虫对象，直接使用'this'即可
+var crawlingGoogle = {
     // ...
     scrape: function (r, $, expand) {
         expand($('title').text());
@@ -378,11 +385,27 @@ crawlingGoogle = {
 
 crawlerAAA.loadRule(crawlingGoogle, function (text) {
     console.log(text);
+    this.addTasks('www.abc.com');
 });
 
 crawlerBBB.loadRule(crawlingGoogle, function (text) {
     console.log(text.toLowerCase());
 });
+```
+
+* `removeRule`
+
+ 移除Rule
+ 
+```js
+// 根据ruleName移除Rule
+var rule = {
+    // ...
+    ruleName: 'someone'
+    // ...
+}
+c.loadRule(rule);
+c.removeRule('someone');
 ```
 
 [request-opts]: https://github.com/request/request#requestoptions-callback
