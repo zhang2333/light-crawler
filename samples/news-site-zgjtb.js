@@ -16,7 +16,7 @@ for (var i = 1; i <= pages; i++) {
 	urls.push(util.format(u, p));
 }
 
-c = new Crawler({ interval: 1500 });
+c = new Crawler({ interval: 1500, logger: true });
 
 c.addTasks(urls);
 

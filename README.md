@@ -58,6 +58,7 @@ In light-crawler,requesting page is called `task`.Tasks will be put into task-po
 * `downloadDir`: downloaded files in here, default: `../__dirname`
 * `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
 * `tasksSize`: size of task-pool, exceeding tasks is in the buffer of task-pool, default:`50`
+* `logger`: show the console log, default:`false`
 
 ### Crawler API
 

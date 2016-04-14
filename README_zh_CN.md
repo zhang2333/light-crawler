@@ -55,6 +55,7 @@ c.start(function () {
 * `downloadDir`: 下载文件的目录, 默认: `../__dirname`
 * `drainAwait`: 爬虫将在任务池为空时结束，此属性可设置爬虫等待后续需要添加任务的超时时间。默认:`0`(毫秒)
 * `tasksSize`: 任务池的大小，超过的部分会被放入任务池的缓冲池中, 默认:`50`
+* `logger`: 是否在控制台输出log, 默认:`false`
 
 ### Crawler API
 
