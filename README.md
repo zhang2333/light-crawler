@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
 
+[![NPM Status](https://nodei.co/npm/light-crawler.png?downloads=true&downloadRank=true)](https://nodei.co/npm/light-crawler/)
+
+[![NPM Downloads](https://nodei.co/npm-dl/light-crawler.png)](https://nodei.co/npm/light-crawler/)
+
 A simplified directed web crawler, easy to use for scraping pages and downloading resources.
 
 English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/blob/master/README_zh_CN.md).
@@ -25,7 +29,7 @@ c.addRule(function (result) {
 	// result has 2 props : task and body
 	// result.task: id, url, others you added.
 	// result.body is the HTML of the page
-	scrape result.body... // you can use cheerio
+	// scrape result.body, you can use cheerio
 })
 // start your crawler
 c.start(function () {
@@ -342,11 +346,9 @@ c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
 // boolean match(task)
 c.addTasks('http://www.baidu.com', { tag: 3 });
 c.addTasks('http://www.google.com', { tag: 50 });
-c.addRule({ 
-    reg: 'www.**.com', 
-    match: function (task) {
-        return task.tag > 10;
-    }}, function (r) {
+c.addRule({ reg: 'www.**.com', match: function (task) {
+		return task.tag > 10;
+}}, function (r) {
     // scrape google
 });
 ```

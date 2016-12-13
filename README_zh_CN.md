@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
 
+[![NPM Status](https://nodei.co/npm/light-crawler.png?downloads=true&downloadRank=true)](https://nodei.co/npm/light-crawler/)
+
+[![NPM Downloads](https://nodei.co/npm-dl/light-crawler.png)](https://nodei.co/npm/light-crawler/)
+
 ### 安装
 
 ```shell
@@ -19,10 +23,10 @@ c.addTasks('http://www.xxx.com');
 // 定义一个处理数据的函数
 c.addRule(function (result) {
 	// 这里返回的result有task和body两个属性
-    // result.task的属性 : id, url, 以及其他你添加的
+  // result.task的属性 : id, url, 以及其他你添加的
 	// result.body就是爬取页面得到的html代码
-	在这里处理result.body... // 你可以使用cheerio
-})
+	// 在这里处理result.body，建议使用cheerio
+});
 // 启动爬虫，并定义爬虫完成的回调函数
 c.start(function () {
 	console.log('完成!');
@@ -96,7 +100,6 @@ c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'SE' });
 ..function (result) {
 	if (result.task.type == 'SE') {
 		console.log(result.task.url + '是搜索引擎');
-		...
 	}
 	...
 }...
@@ -265,9 +268,9 @@ var html = `
   <div>
 	<ul>
 		<li>
-            <a href="http://link.com/a/1">1</a>
-            <a href="a/2">2</a>
-            <a href="b/3">3</a>
+			<a href="http://link.com/a/1">1</a>
+			<a href="a/2">2</a>
+			<a href="b/3">3</a>
 		</li>
 		<li><a href="4">4</a></li>
 		<li>foo</li>
@@ -334,7 +337,7 @@ var reg = Crawler.getRegWithPath('http://www.google.com/test/something.html');
 c.addTasks('http://www.baidu.com', { name: 'baidu', type: '搜索引擎' });
 c.addTasks('http://www.google.com', { name: 'google', type: '搜索引擎' });
 // 你可能已经注意到了，下面的两个正则是同样的，而name值却不同
-// 不过属性的命名最好避免 'reg' 'match' 'scrape' 'expand'
+// 不过自定义属性的命名最好避免 'reg' 'match' 'scrape' 'expand'
 c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
     // 处理result.body
 });
@@ -346,11 +349,9 @@ c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
 // match函数接受参数task，返回一个布尔值
 c.addTasks('http://www.baidu.com', { tag: 3 });
 c.addTasks('http://www.google.com', { tag: 50 });
-c.addRule({ 
-    reg: 'www.**.com', 
-    match: function (task) {
-        return task.tag > 10;
-    }}, function (r) {
+c.addRule({ reg: 'www.**.com', match: function (task) {
+		return task.tag > 10;
+}}, function (r) {
     // 处理google
 });
 ```

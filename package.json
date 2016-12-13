@@ -2,7 +2,7 @@
   "name": "light-crawler",
   "version": "1.6.2",
   "author": "LouisZhang <spade9k@gmail.com>",
-  "description": "a simplified directed web crawler, easy to use for scraping pages and downloading resources.",
+  "description": "a simplified directed web crawler, easy to use for scraping pages and downloading resources of page.",
   "keywords": [
     "crawler",
     "spider",
