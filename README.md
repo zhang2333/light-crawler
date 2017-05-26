@@ -40,29 +40,29 @@ c.start().then(() => {
 
 In light-crawler,requesting page is called `task`.Tasks will be put into task-pool and be executed in order.
 
-* `settings`: basic settings of crawler
- * `id`: id of the crawler,integer or string，defalut: `null`
- * `interval`: crawling interval，defalut: `0`(ms).or a random value in a range e.g.`[200,500]`
- * `retry`: retry times，defalut:`3`
- * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
- * `skipDuplicates`: whether skip the duplicate task(same url)，defalut: `false`
+- `settings`: basic settings of crawler
+  - `id`: id of the crawler,integer or string，defalut: `null`
+  - `interval`: crawling interval，defalut: `0`(ms).or a random value in a range e.g.`[200,500]`
+  - `retry`: retry times，defalut:`3`
+  - `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
+  - `skipDuplicates`: whether skip the duplicate task(same url)，defalut: `false`
 
- * `requestOpts`: request options of task，**this is global request options**
-  * `timeout`: defalut: `10000`
-  * `proxy`: proxy address
-  * `headers`: headers of request，defalut: `{}`
-  * or other settings in [request opts][request-opts]
+  - `requestOpts`: request options of task，**this is global request options**
+    - `timeout`: defalut: `10000`
+    - `proxy`: proxy address
+    - `headers`: headers of request，defalut: `{}`
+    - or other settings in [request opts][request-opts]
 
-* `taskCounter`: count all finished tasks whether they are failed or not
-* `failCounter`: count all failed tasks
-* `doneCounter`: count tasks which has done
-* `started`： boolean
-* `finished`： boolean
-* `errLog`: record all error infos in crawling
-* `downloadDir`: downloaded files in here, default: `../__dirname`
-* `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
-* `tasksSize`: size of task-pool, exceeding tasks is in the buffer of task-pool, default:`50`
-* `logger`: show the console log, default:`false`
+- `taskCounter`: count all finished tasks whether they are failed or not
+- `failCounter`: count all failed tasks
+- `doneCounter`: count tasks which has done
+- `started`： boolean
+- `finished`： boolean
+- `errLog`: record all error infos in crawling
+- `downloadDir`: downloaded files in here, default: `../__dirname`
+- `drainAwait`: crawler will be finished when task-pool is drained.This prop will let crawler await adding tasks when task-pool is drained.default:`0`(ms)
+- `tasksSize`: size of task-pool, exceeding tasks is in the buffer of task-pool, default:`50`
+- `logger`: show the console log, default:`false`
 
 ### Crawler API
 

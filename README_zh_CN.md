@@ -37,29 +37,29 @@ c.start().then(() => {
 
 在light-crawler每一次爬取页面的行为被称为一个任务，根据顺序执行的次序任务会被赋予相应的`id`。任务会被放置在`Crawler`的任务池中依次执行，设置`Crawler.settings.concurrency`可以指定爬虫同时执行几个任务。
 
-* `settings`: 爬虫的基本设置
- * `id`: 爬虫的id，可以是字符串也可以是整型，主要用于和其他爬虫区分
- * `interval`: 爬取间隔的毫秒值，默认为`0`(毫秒).或者是一个范围内的随机值，如`[200,500]`
- * `retry`: 重试次数，默认为`3`
- * `concurrency`: 并发爬取页面数，默认为`1`
- * `skipDuplicates`: 是否去除重复的任务（相同的url），默认为`false`
+- `settings`: 爬虫的基本设置
+  - `id`: 爬虫的id，可以是字符串也可以是整型，主要用于和其他爬虫区分
+  - `interval`: 爬取间隔的毫秒值，默认为`0`(毫秒).或者是一个范围内的随机值，如`[200,500]`
+  - `retry`: 重试次数，默认为`3`
+  - `concurrency`: 并发爬取页面数，默认为`1`
+  - `skipDuplicates`: 是否去除重复的任务（相同的url），默认为`false`
 
- * `requestOpts`: 爬取任务的设置，**这是全局request参数**
-  * `timeout`: 任务超时时间的毫秒值，默认为`10000`
-  * `proxy`: 代理地址
-  * `headers`: 请求头信息，默认为`{}`
-  * 以及其他所有的[request选项][request-opts]
+  - `requestOpts`: 爬取任务的设置，**这是全局request参数**
+    - `timeout`: 任务超时时间的毫秒值，默认为`10000`
+    - `proxy`: 代理地址
+    - `headers`: 请求头信息，默认为`{}`
+    - 以及其他所有的[request选项][request-opts]
 
-* `taskCounter`: 记录爬过的任务数
-* `failCounter`: 记录爬取失败的任务数
-* `doneCounter`: 记录已正常完成的任务数
-* `started`： boolean
-* `finished`： boolean
-* `errLog`: 记录爬取过程中遇到的异常。单个任务产生的异常不会阻止后面要执行的任务，异常信息会被保留在`errLog`里面，在爬虫结束时输出。
-* `downloadDir`: 下载文件的目录, 默认: `../__dirname`
-* `drainAwait`: 爬虫将在任务池为空时结束，此属性可设置爬虫等待后续需要添加任务的超时时间。默认:`0`(毫秒)
-* `tasksSize`: 任务池的大小，超过的部分会被放入任务池的缓冲池中, 默认:`50`
-* `logger`: 是否在控制台输出log, 默认:`false`
+- `taskCounter`: 记录爬过的任务数
+- `failCounter`: 记录爬取失败的任务数
+- `doneCounter`: 记录已正常完成的任务数
+- `started`： boolean
+- `finished`： boolean
+- `errLog`: 记录爬取过程中遇到的异常。单个任务产生的异常不会阻止后面要执行的任务，异常信息会被保留在`errLog`里面，在爬虫结束时输出。
+- `downloadDir`: 下载文件的目录, 默认: `../__dirname`
+- `drainAwait`: 爬虫将在任务池为空时结束，此属性可设置爬虫等待后续需要添加任务的超时时间。默认:`0`(毫秒)
+- `tasksSize`: 任务池的大小，超过的部分会被放入任务池的缓冲池中, 默认:`50`
+- `logger`: 是否在控制台输出log, 默认:`false`
 
 ### Crawler API
 
