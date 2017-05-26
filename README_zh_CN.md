@@ -1,4 +1,4 @@
-## Light Crawler - 简易定向爬虫
+## Light Crawler - 轻量级定向爬虫
 
 [![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
 
@@ -445,7 +445,6 @@ crawlerBBB.loadRule(crawlingGoogle, function (text) {
 ```js
 // 根据ruleName移除Rule
 let rule = {
-    // ...
     ruleName: 'someone'
     // ...
 }
