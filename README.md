@@ -19,11 +19,11 @@ npm install light-crawler
 ### Example
 
 ```javascript
-var Crawler = require('light-crawler');
+const Crawler = require('light-crawler');
 // create a instance of Crawler
-var c = new Crawler();
+let c = new Crawler();
 // add a url or an array to request
-c.addTasks('http://www.xxx.com');
+c.addTask('http://www.xxx.com');
 // define a scraping rule
 c.addRule(function (result) {
 	// result has 2 props : task and body
@@ -32,7 +32,7 @@ c.addRule(function (result) {
 	// scrape result.body, you can use cheerio
 })
 // start your crawler
-c.start(function () {
+c.start().then(() => {
 	console.log('Finished!');
 });
 ```
@@ -47,11 +47,11 @@ In light-crawler,requesting page is called `task`.Tasks will be put into task-po
  * `concurrency`: an integer for determining how many tasks should be run in parallel，defalut: `1`
  * `skipDuplicates`: whether skip the duplicate task(same url)，defalut: `false`
 
-* `requestOpts`: request options of task，**this is global request options**
- * `timeout`: defalut: `10000`
- * `proxy`: proxy address
- * `headers`: headers of request，defalut: `{}`
- * or other settings in [request opts][request-opts]
+ * `requestOpts`: request options of task，**this is global request options**
+  * `timeout`: defalut: `10000`
+  * `proxy`: proxy address
+  * `headers`: headers of request，defalut: `{}`
+  * or other settings in [request opts][request-opts]
 
 * `taskCounter`: count all finished tasks whether they are failed or not
 * `failCounter`: count all failed tasks
@@ -72,7 +72,7 @@ In light-crawler,requesting page is called `task`.Tasks will be put into task-po
  
 ```javascript
 // e.g.：
-var c = new Crawler({
+let c = new Crawler({
 	interval: 1000,
 	retry: 5,
 	.... // other props of `crawler.settings`
@@ -91,34 +91,75 @@ var c = new Crawler({
  add task into task-pool
 
 ```javascript
-// e.g.：
-c.addTasks('http://www.google.com');
-// or an array
+// e.g.
+
+// add single task
+
+// input: url
+c.addTask('http://www.google.com');
+
+// input: url, prop
+// set request options for the task(will override global)
+c.addTask('http://www.google.com', {
+	name: 'google',
+	requestOpts: { timeout: 1 }
+});
+
+// input: url, next(processor of the task)
+// crawler rules will not process this task again
+c.addTask('http://www.google.com', function (result) {
+	console.log('the task has done');
+});
+
+// input: url, prop, next
+c.addTask('http://www.google.com', { name: 'google' }, function (result) {
+	console.log('the task has done');
+});
+
+// or input an object
+c.addTask({
+	url: 'http://www.google.com',
+	type: 'SE',
+	next: function (result) {
+		console.log('the task has done');
+	}
+});
+
+// add multiple tasks
+
+// input: an array of string
 c.addTasks(['http://www.google.com','http://www.yahoo.com']);
 
-// add props for a task
-c.addTasks('http://www.google.com', { disc: 'google' });
-// add same props for tasks
-c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'searching engine' });
+// add prop for tasks
+c.addTasks(['http://www.google.com','http://www.yahoo.com'], { type: 'SE' });
 // get these props in processing function
-..function (result) {
-	if (result.task.type == 'searching engine') {
-		console.log(result.task.url + ' is a site that powered by S.E.');
-		...
+c.addRule(function (result) {
+	if (result.task.type == 'SE') {
+		console.log('Searching Engine');
 	}
-	...
-}...
+});
 
-// or set request options for the task(will override global)
-c.addTasks('http://www.google.com', { requestOpts: { timeout: 1 } });
+// input: an array of object
+c.addTasks([
+	{
+		url: 'http://www.google.com',
+		name: 'google'
+	},
+	{
+		url: 'http://www.sohu.com',
+		name: 'sohu'
+	}
+]);
+
 ```
+
 * `addRule(reg: string|object, func: function)`
 
  define a rule for scraping
 
 ```javascript
 // e.g.：
-var tasks = [
+let tasks = [
 	'http://www.google.com/123', 
 	'http://www.google.com/2546', 
 	'http://www.google.com/info/foo',
@@ -144,12 +185,12 @@ c.addRule(function (result, $){
 > Tip: light-crawler will transform all `.` in rule string.So you can directly write `www.a.com` instead of `www\\.a\\.com`.
 If you need `.*`,you can use `**`, just like the upper example.If you have to use `.`,just `<.>`.
 
-* `start(onFinished: function)`
+* `start()`
 
  start the crawler
 ```javascript
 // e.g.：
-c.start(function () {
+c.start().then(function () {
 	// on finished
 	console.log('done！');
 });
@@ -211,16 +252,16 @@ just add `downloadTask: true` for task you need to download
 // specify download directory
 c.tweak({ downloadDir: 'D:\\yyy' });
 
-var file = 'http://xxx/abc.jpg';
+let file = 'http://xxx/abc.jpg';
 // 'abc.jpg' will be downloaded into 'D:\\yyy'
-c.addTasks(file, {downloadTask: true});
+c.addTask(file, {downloadTask: true});
 // or you can specify its name
-c.addTasks(file, {downloadTask: true, downloadFile: 'mine.jpg'});
+c.addTask(file, {downloadTask: true, downloadFile: 'mine.jpg'});
 // or specify relative dir(to 'D:\\yyy')
 // if this directory ('jpg') doesn't exist,crawler will create it
-c.addTasks(file, {downloadTask: true, downloadFile: 'jpg/mine.jpg'});
+c.addTask(file, {downloadTask: true, downloadFile: 'jpg/mine.jpg'});
 // or specify absolute dir
-c.addTasks(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
+c.addTask(file, {downloadTask: true, downloadFile: 'C:\\pics\\mine.jpg'});
 ```
 
 ### Events
@@ -265,7 +306,7 @@ c.on('drain', function () {
 
 ```js
 // e.g.：
-var html = `
+let html = `
   <div>
 	<ul>
 		<li>
@@ -278,13 +319,13 @@ var html = `
 	</ul>
 </div>
 `;
-var links = Crawler.getLinks(html, 'http://link.com/index.html');
+let links = Crawler.getLinks(html, 'http://link.com/index.html');
 console.log(links);
 // ['http://link.com/a/1','http://link.com/a/2','http://link.com/b/3','http://link.com/4']
 
 // you can also use cheerio
-var $ = cheerio.load(html);
-var links = Crawler.getLinks($('ul'));
+let $ = cheerio.load(html);
+let links = Crawler.getLinks($('ul'));
 ```
 
 * `getImages(html: string, baseUrl: string)`
@@ -309,7 +350,7 @@ User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64)
 ```
 load this file and set headers for requesting
 ```js
-var headers = Crawler.loadHeaders('example.headers');
+let headers = Crawler.loadHeaders('example.headers');
 c.tweak({
 	requestOpts: {
 		headers: headers
@@ -322,7 +363,7 @@ c.tweak({
  get reg string with path of fromUrl
  
 ```js
-var reg = Crawler.getRegWithPath('http://www.google.com/test/something.html');
+let reg = Crawler.getRegWithPath('http://www.google.com/test/something.html');
 // reg: http://www.google.com/test/**
 ```
 
@@ -332,8 +373,8 @@ var reg = Crawler.getRegWithPath('http://www.google.com/test/something.html');
 
 ```js
 // since 1.5.10, the rule of scraping could be a object
-c.addTasks('http://www.baidu.com', { name: 'baidu', type: 'S.E.' });
-c.addTasks('http://www.google.com', { name: 'google', type: 'S.E.' });
+c.addTask('http://www.baidu.com', { name: 'baidu', type: 'S.E.' });
+c.addTask('http://www.google.com', { name: 'google', type: 'S.E.' });
 // following rules has same reg string, but name are different
 c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
     // scraping r.body
@@ -344,8 +385,8 @@ c.addRule({ reg: 'www.**.com', name: 'google' }, function (r) {
 
 // using function match could make rules more complex
 // boolean match(task)
-c.addTasks('http://www.baidu.com', { tag: 3 });
-c.addTasks('http://www.google.com', { tag: 50 });
+c.addTask('http://www.baidu.com', { tag: 3 });
+c.addTask('http://www.google.com', { tag: 50 });
 c.addRule({ reg: 'www.**.com', match: function (task) {
 		return task.tag > 10;
 }}, function (r) {
@@ -368,8 +409,8 @@ exports.crawlingGoogle = {
 };
 
 // crawler.js
-var c = new Crawler();
-c.addTasks('http://www.google.com', { name: 'google' });
+let c = new Crawler();
+c.addTask('http://www.google.com', { name: 'google' });
 c.loadRule(crawlingGoogle);
 
 // or expand the function named 'scrape'
@@ -384,7 +425,7 @@ crawlingGoogle = {
 
 crawlerAAA.loadRule(crawlingGoogle, function (text) {
     console.log(text);
-    this.addTasks('www.abc.com');
+    this.addTask('www.abc.com');
 });
 
 crawlerBBB.loadRule(crawlingGoogle, function (text) {
@@ -398,7 +439,7 @@ crawlerBBB.loadRule(crawlingGoogle, function (text) {
 
 ```js
 // by its 'ruleName'
-var rule = {
+let rule = {
     // ...
     ruleName: 'someone'
     // ...
