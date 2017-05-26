@@ -1,52 +1,46 @@
-'use strict';
+const util = require('util');
+const path = require('path');
+const fs = require('fs');
 
-var util = require('util'),
-    path = require('path'),
-    fs = require('fs');
+const expect = require('chai').expect;
 
-var expect = require('chai').expect;
-
-var Crawler = require('../index');
+const Crawler = require('../index');
 
 describe('Crawler', function () {
     describe('Simple Test', function () {
         this.timeout(5000);
-        
+
         it('simple', function (done) {
-            var url = 'http://www.google.com';
-            var c = new Crawler({ id: 'simple' });
-            c.addTasks(url).addRule(function (result, $) {
+            let url = 'http://www.google.com';
+            let c = new Crawler({ id: 'simple' });
+            c.addTask(url, (result, $) => {
                 expect($('title').text()).to.be.ok;
                 expect(result.body).to.be.ok;
                 c.log('[Successful]~~~', false, 2);
-            }).start(function () {
-                done();
-            });
+            }).start().then(done);
         });
     });
     
     describe('Settings/Props Test', function () {
         this.timeout(30000);
-        var c;
+        let c;
 
         it('#timeout retry', function (done) {
-            var url = 'http://www.google.com';
+            let url = 'http://www.google.com';
             c = new Crawler({
                 id: '#timeout retry',
                 requestOpts: { timeout: 10 }
             });
-            c.addTasks(url).addRule(function (result) {
+            c.addTask(url).addRule(function (result) {
                 expect(result.body).to.not.exist;
-            }).start(function () {
-                done();
-            });
+            }).start().then(done);
         });
 
         it('#downloadTask', function (done) {
             c = new Crawler({ id: '#downloadTask', requestOpts: { timeout: 20000 } });
-            var url = 'https://www.google.com/images/nav_logo242.png';
-            c.addTasks(url, { downloadTask: true, downloadFile: 'test.png' });
-            c.start(function () {
+            let url = 'https://www.google.com/images/nav_logo242.png';
+            c.addTask(url, { downloadTask: true, downloadFile: 'test.png' });
+            c.start().then(() => {
                 fs.unlinkSync(path.resolve(c.settings.downloadDir, 'test.png'));
                 done();
             });
@@ -64,21 +58,19 @@ describe('Crawler', function () {
                 } else {
                     expect(result.task.type).to.be.equal('Other');
                 }
-            }).start(function () {
-                done();
-            });
+            }).start().then(done);
         });
 
         it('#skipDuplicates', function (done) {
-            var urls = ['http://www.baidu.com', 'http://www.baidu.com',
+            let urls = ['http://www.baidu.com', 'http://www.baidu.com',
                 'http://www.baidu.com', 'http://www.google.com'];
             c = new Crawler({ id: '#skipDuplicates', interval: 500, skipDuplicates: true });
-            c.addTasks(urls).addRule(function (result) { }).start(function () {
+            c.addTasks(urls).start().then(() => {
                 expect(c.taskCounter).to.be.equal(3);
                 done();
             });
             setTimeout(function () {
-                c.addTasks('http://www.baidu.com');
+                c.addTask('http://www.baidu.com');
                 c.addTasks(['http://www.baidu.com', 'http://www.sohu.com']);
             }, 1000);
         });
@@ -86,16 +78,16 @@ describe('Crawler', function () {
 
     describe('Function Test', function () {
         this.timeout(20000);
-        var c;
+        let c;
         
         it('#addRule()', function (done) {
             c = new Crawler({
                 id: '#addRule()',
                 interval: 500
             });
-            c.addTasks('http://www.baidu.com', { name: 'baidu' });
-            c.addTasks('http://www.google.com', { name: 'google' });
-            var counter = 0;
+            c.addTask('http://www.baidu.com', { name: 'baidu' });
+            c.addTask('http://www.google.com', { name: 'google' });
+            let counter = 0;
             c.addRule({ reg: 'www.**.com', name: 'baidu' }, function (r) {
                 if (r.body) {
                     counter++;
@@ -106,7 +98,7 @@ describe('Crawler', function () {
                     counter++;
                 }
             });
-            c.start(function () {
+            c.start().then(() => {
                 expect(counter).to.be.equal(2);
                 done();
             });
@@ -117,15 +109,15 @@ describe('Crawler', function () {
                 id: '#removeRule()',
                 interval: 500
             });
-            c.addTasks('http://www.baidu.com', { name: 'baidu' });
-            var counter = 0;
+            c.addTask('http://www.baidu.com', { name: 'baidu' });
+            let counter = 0;
             c.addRule({ reg: 'www.**.com', ruleName: 'baidu', name: 'baidu' }, function (r) {
                 if (r.body) {
                     counter++;
                 }
             });
             c.removeRule('baidu');
-            c.start(function () {
+            c.start().then(() => {
                 expect(counter).to.be.equal(0);
                 done();
             });
@@ -136,9 +128,9 @@ describe('Crawler', function () {
                 id: '#loadRule()'
             });
             
-            c.addTasks('http://www.google.com', { name: 'google' });
+            c.addTask('http://www.google.com', { name: 'google' });
             
-            var crawlingGoogle = {
+            let crawlingGoogle = {
                 reg: 'www.**.com',
                 name: 'google',
                 scrape: function (r, $, callback) {
@@ -150,9 +142,7 @@ describe('Crawler', function () {
                 expect(text).to.be.ok;
             });
             
-            c.start(function () {
-                done();
-            });
+            c.start().then(done);
         });
         
         it('#pause/resume()', function (done) {
@@ -164,13 +154,13 @@ describe('Crawler', function () {
             c.addRule(function (r) {
                 expect(r.body).to.be.ok;
             });
-            c.start(function () {
+            c.start().then(() => {
                 expect(c.taskCounter).to.be.equal(3);
                 done();
             });
-            setTimeout(function () {
+            setTimeout(() => {
                 c.pause();
-                setTimeout(function () {
+                setTimeout(() => {
                     expect(c.isPaused()).to.be.true;
                     c.resume();
                 }, 1000);
@@ -183,8 +173,8 @@ describe('Crawler', function () {
                 interval: 100,
                 concurrency: 2
             });
-            var urls = [];
-            for (var i = 0; i < 4; i++) {
+            let urls = [];
+            for (let i = 0; i < 4; i++) {
                 urls.push('http://www.baidu.com');
             }
             
@@ -194,7 +184,7 @@ describe('Crawler', function () {
             
             c.addTasks(urls).addRule(function (r) {
                 expect(r.body).to.be.ok;
-            }).start(function () {
+            }).start().then(() => {
                 expect(c.taskCounter).to.be.equal(2);
                 done();
             });
@@ -206,17 +196,17 @@ describe('Crawler', function () {
                 interval: 100,
                 tasksSize: 2
             });
-            var urls = [];
-            for (var i = 0; i < 6; i++) {
+            let urls = [];
+            for (let i = 0; i < 6; i++) {
                 urls.push('http://www.baidu.com');
             }
             c.addTasks(urls).addRule(function (r) {
                 expect(r.body).to.be.ok;
-            }).start(function () {
+            }).start().then(() => {
                 expect(c.taskCounter).to.be.equal(12);
                 done();
             });
-            var f = true;
+            let f = true;
             c.on('drain', function () {
                 if (f) {
                     c.addTasks(urls);

@@ -1,12 +1,9 @@
-'use strict';
-
-var expect = require('chai').expect;
-	
-var Crawler = require('../index');
+const expect = require('chai').expect;
+const Crawler = require('../index');
 
 describe('Utils', function () {
 	it('#getLinks()', function () {
-		var html= `
+		let html= `
 			<div>
 				<ul>
 					<li>
@@ -19,12 +16,12 @@ describe('Utils', function () {
 				</ul>
 			</div>
 		`;
-		var links = Crawler.getLinks(html, 'http://link.com/index.html');
+		let links = Crawler.getLinks(html, 'http://link.com/index.html');
 		expect(links).to.eql(['http://link.com/a/1','http://link.com/a/2','http://link.com/b/3','http://link.com/4']);
 	});
     
     it('#getImages()', function () {
-		var html= `
+		let html= `
 			<div>
 				<ul>
 					<li>
@@ -38,12 +35,12 @@ describe('Utils', function () {
 				</ul>
 			</div>
 		`;
-		var images = Crawler.getImages(html, 'http://image.com/index.html');
+		let images = Crawler.getImages(html, 'http://image.com/index.html');
 		expect(images).to.eql(['http://image.com/a/1.jpg','http://image.com/a/2.png','http://image.com/b/3.gif','http://image.com/4.jpeg']);
 	});
 	
 	it('#loadHeaders()', function () {
-		var headers = Crawler.loadHeaders('samples/example.headers');
+		let headers = Crawler.loadHeaders('samples/example.headers');
 		expect(headers).to.have.deep.property('Host', 'abc');
 	});
 });
