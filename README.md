@@ -6,7 +6,7 @@
 
 [![NPM Downloads](https://nodei.co/npm-dl/light-crawler.png)](https://nodei.co/npm/light-crawler/)
 
-A simplified directed web crawler, easy to use for scraping pages and downloading resources.
+A simplified directed web crawler, easy for scraping web pages and downloading other resources.
 
 English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/blob/master/README_zh_CN.md).
 
