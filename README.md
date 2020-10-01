@@ -36,7 +36,7 @@ c.start().then(() => {
 	console.log('Finished!');
 });
 ```
-### Crawler Property
+### Crawler Properties
 
 In light-crawler,requesting page is called `task`.Tasks will be put into task-pool and be executed in order.
 
