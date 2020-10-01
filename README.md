@@ -1,4 +1,5 @@
-## Light Crawler - Directed Crawler
+## Light Crawler - Directed Crawler 
+## An amazing Light - Directed Crawler
 
 [![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
 
