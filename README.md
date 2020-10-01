@@ -31,7 +31,7 @@ c.addRule(function (result) {
 	// result.body is the HTML of the page
 	// scrape result.body, you can use cheerio
 })
-// start your crawler
+// start your crawler now
 c.start().then(() => {
 	console.log('Finished!');
 });
@@ -292,7 +292,7 @@ c.on('beforeCrawl', function (task) {
 ```js
 // e.g.
 c.on('drain', function () {
-    // do something
+    // perform something
 });
 ```
 
