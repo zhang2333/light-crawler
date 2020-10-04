@@ -10,7 +10,7 @@ A simplified directed web crawler, easy for scraping web pages and downloading o
 
 English Doc(Here) or [中文文档](https://github.com/zhang2333/light-crawler/blob/master/README_zh_CN.md).
 
-### Install
+### Installation
 
 ```shell
 npm install light-crawler
