@@ -8,7 +8,7 @@
 
 ### 安装
 
-```shell
+```SHEEL
 npm install light-crawler
 ```
 
