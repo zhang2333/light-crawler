@@ -1,4 +1,4 @@
-## Light Crawler - Directed Crawler
+## Light Crawler - A Directed Web Crawler
 
 [![Build Status](https://travis-ci.org/zhang2333/light-crawler.svg)](https://travis-ci.org/zhang2333/light-crawler)
 
