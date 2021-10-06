@@ -448,4 +448,5 @@ c.loadRule(rule);
 c.removeRule('someone');
 ```
 
+
 [request-opts]: https://github.com/request/request#requestoptions-callback
